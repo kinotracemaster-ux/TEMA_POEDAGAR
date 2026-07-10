@@ -1,0 +1,369 @@
+{% comment %} ================================================
+  POEDAGAR — GALERÍA INSTAGRAM / VIDEOS
+  Carrusel Horizontal (4 en PC) con Auto-Play al Hover.
+================================================ {% endcomment %}
+
+{%- assign s = section.settings -%}
+{%- assign sid = section.id -%}
+
+<section id="poedagar-ig-{{ sid }}" class="poedagar-ig" style="background-color:{{ s.bg_color }};">
+  <div class="poedagar-ig__container">
+    
+    <div class="poedagar-ig__header" style="text-align: {{ s.text_align }}; max-width: {{ s.max_width }}px; margin: 0 auto 40px auto;">
+      {%- if s.eyebrow != blank -%}
+        <p class="poedagar-ig__eyebrow" style="color:{{ s.eyebrow_color }};">{{ s.eyebrow }}</p>
+      {%- endif -%}
+      {%- if s.title != blank -%}
+        <h2 class="poedagar-ig__title" style="color:{{ s.text_color }};">{{ s.title }}</h2>
+      {%- endif -%}
+      {%- if s.subtitle != blank -%}
+        <a href="{{ s.profile_link | default: '#' }}" class="poedagar-ig__subtitle" style="color:{{ s.text_color }}; opacity: 0.7;">{{ s.subtitle }}</a>
+      {%- endif -%}
+      {%- if s.btn_text != blank -%}
+        <div style="margin-top:20px;">
+          <a href="{{ s.profile_link }}" class="poedagar-ig__main-btn" style="color:{{ s.text_color }}; border-color:{{ s.text_color }};">{{ s.btn_text }}</a>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="poedagar-ig__carousel-wrap">
+      {%- if section.blocks.size > 4 -%}
+        <button class="poedagar-ig__arrow poedagar-ig__arrow--prev" aria-label="Anterior">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+      {%- endif -%}
+
+      <div class="poedagar-ig__track" id="track-{{ sid }}">
+        {%- for block in section.blocks -%}
+          {%- assign b = block.settings -%}
+          <div class="poedagar-ig__item" {{ block.shopify_attributes }}>
+            <div class="poedagar-ig__media">
+              {%- if b.video_url != blank -%}
+                <video 
+                  class="poedagar-ig__video" 
+                  src="{{ b.video_url }}" 
+                  poster="{{ b.image | img_url: '400x700', crop: 'center' }}"
+                  preload="none" 
+                  loop 
+                  muted 
+                  playsinline></video>
+              {%- elsif b.image != blank -%}
+                <img src="{{ b.image | img_url: '400x700', crop: 'center' }}" alt="Instagram post" class="poedagar-ig__img" loading="lazy">
+              {%- else -%}
+                <div class="poedagar-ig__placeholder"></div>
+              {%- endif -%}
+              
+              <div class="poedagar-ig__overlay">
+                <a href="{{ b.link | default: '#' }}" target="_blank" rel="noopener" class="poedagar-ig__watch-btn">
+                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+                   {{ b.btn_text | default: 'Ver Video' }}
+                </a>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if section.blocks.size > 4 -%}
+        <button class="poedagar-ig__arrow poedagar-ig__arrow--next" aria-label="Siguiente">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+<style>
+#poedagar-ig-{{ sid }} {
+  padding: {{ s.padding_v }}px 0;
+  overflow: hidden;
+}
+.poedagar-ig__container {
+  width: 100%;
+}
+.poedagar-ig__header {
+  padding: 0 24px;
+}
+.poedagar-ig__eyebrow {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 11px;
+  margin: 0 0 12px;
+}
+.poedagar-ig__title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-style: italic;
+  font-weight: 600;
+  margin: 0 0 12px;
+  line-height: 1.1;
+}
+.poedagar-ig__subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: 300;
+  display: inline-block;
+  transition: opacity 0.3s ease;
+}
+.poedagar-ig__subtitle:hover {
+  opacity: 1 !important;
+}
+.poedagar-ig__main-btn {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 10px 24px;
+  border: 1px solid currentColor;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  background: transparent;
+}
+.poedagar-ig__main-btn:hover {
+  background: currentColor;
+  color: {{ s.bg_color }} !important;
+}
+
+/* Carrusel Container */
+.poedagar-ig__carousel-wrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+.poedagar-ig__track {
+  display: flex;
+  gap: {{ s.gap }}px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* Firefox */
+  padding: 0 24px;
+  scroll-behavior: smooth;
+  width: 100%;
+}
+.poedagar-ig__track::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+.poedagar-ig__item {
+  flex: 0 0 calc({% if s.columns_desktop == 4 %}25%{% elsif s.columns_desktop == 5 %}20%{% else %}33.333%{% endif %} - {{ s.gap | times: s.columns_desktop | minus: s.gap | divided_by: s.columns_desktop }}px);
+  scroll-snap-align: start;
+  min-width: 250px;
+}
+.poedagar-ig__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9/16;
+  background-color: #1a1a1a;
+  overflow: hidden;
+  cursor: pointer;
+}
+.poedagar-ig__video, 
+.poedagar-ig__img,
+.poedagar-ig__placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease, filter 0.8s ease;
+}
+.poedagar-ig__placeholder {
+  background: linear-gradient(135deg, #333, #111);
+}
+
+/* Hover Effects Overlay */
+.poedagar-ig__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.poedagar-ig__media:hover .poedagar-ig__overlay {
+  opacity: 1;
+}
+.poedagar-ig__media:hover .poedagar-ig__video,
+.poedagar-ig__media:hover .poedagar-ig__img {
+  transform: scale(1.05); /* Slight zoom exactly like requested */
+}
+.poedagar-ig__watch-btn {
+  background-color: #cfa85c;
+  color: #1a1a1a;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 12px 24px;
+  border-radius: 4px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transform: translateY(20px);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.poedagar-ig__media:hover .poedagar-ig__watch-btn {
+  transform: translateY(0);
+}
+.poedagar-ig__watch-btn:hover {
+  background-color: #fff;
+}
+
+/* Arrows */
+.poedagar-ig__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,0.9);
+  border: none;
+  border-radius: 50%;
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+}
+.poedagar-ig__arrow:hover {
+  background: #cfa85c;
+  color: #fff;
+}
+.poedagar-ig__arrow--prev { left: 32px; }
+.poedagar-ig__arrow--next { right: 32px; }
+
+@media (max-width: 900px) {
+  .poedagar-ig__item {
+    flex: 0 0 calc(50% - {{ s.gap | divided_by: 2 }}px);
+    min-width: 200px;
+  }
+}
+@media (max-width: 600px) {
+  .poedagar-ig__item {
+    flex: 0 0 75%;
+  }
+  .poedagar-ig__arrow { display: none; } /* Hide arrows on touch devices */
+  .poedagar-ig__track { padding: 0 16px; scroll-padding-left: 16px; }
+  .poedagar-ig__title { font-size: 32px; }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const track = document.getElementById('track-{{ sid }}');
+  if (!track) return;
+
+  // Horizontal Scrolling con flechas
+  const btnPrev = track.parentElement.querySelector('.poedagar-ig__arrow--prev');
+  const btnNext = track.parentElement.querySelector('.poedagar-ig__arrow--next');
+  
+  if(btnPrev && btnNext) {
+    btnPrev.addEventListener('click', () => {
+      const itemWidth = track.querySelector('.poedagar-ig__item').offsetWidth;
+      track.scrollBy({ left: -(itemWidth + {{ s.gap }}), behavior: 'smooth' });
+    });
+    btnNext.addEventListener('click', () => {
+      const itemWidth = track.querySelector('.poedagar-ig__item').offsetWidth;
+      track.scrollBy({ left: itemWidth + {{ s.gap }}, behavior: 'smooth' });
+    });
+  }
+
+  // Reproducción de video nativa solo al hacer hover (optimizada)
+  const medias = track.querySelectorAll('.poedagar-ig__media');
+  medias.forEach(media => {
+    const video = media.querySelector('video');
+    if(video) {
+        // En móviles u ordenadores táctiles, cargamos todo de una? No, preload="none" lo evita.
+        media.addEventListener('mouseenter', () => {
+          video.play().catch(e => console.log('Reproducción automática prevenida'));
+        });
+        media.addEventListener('mouseleave', () => {
+          video.pause();
+        });
+    }
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Poedagar — Galería Video",
+  "max_blocks": 10,
+  "settings": [
+    { "type": "header", "content": "Texto cabecera" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Poedagar en Acción" },
+    { "type": "text", "id": "title", "label": "Título", "default": "Síguenos en Instagram" },
+    { "type": "text", "id": "subtitle", "label": "Usuario o Subtítulo", "default": "@poedagar.latam" },
+    { "type": "url", "id": "profile_link", "label": "Enlace del Perfil Oficial" },
+    { "type": "text", "id": "btn_text", "label": "Texto del Botón Central", "default": "Ver Perfil Oficial" },
+    { "type": "select", "id": "text_align", "label": "Alineación del texto", "default": "center",
+      "options": [
+        { "value": "left", "label": "Izquierda" },
+        { "value": "center", "label": "Centro" }
+      ]
+    },
+    { "type": "header", "content": "Colores" },
+    { "type": "color", "id": "bg_color", "label": "Color de fondo", "default": "#f9f8f6" },
+    { "type": "color", "id": "text_color", "label": "Color de textos", "default": "#1a1a1a" },
+    { "type": "color", "id": "eyebrow_color", "label": "Color eyebrow", "default": "#cfa85c" },
+    { "type": "header", "content": "Diseño de la Galería" },
+    { "type": "range", "id": "max_width", "label": "Ancho máximo títulos (px)", "min": 600, "max": 1200, "step": 50, "default": 800 },
+    { "type": "range", "id": "padding_v", "label": "Padding vertical (px)", "min": 20, "max": 160, "step": 10, "default": 80 },
+    { "type": "range", "id": "columns_desktop", "label": "Videos visibles a la vez (PC)", "min": 3, "max": 6, "step": 1, "default": 4 },
+    { "type": "range", "id": "gap", "label": "Espacio entre videos (px)", "min": 0, "max": 40, "step": 2, "default": 4 }
+  ],
+  "blocks": [
+    {
+      "type": "video",
+      "name": "Video de Instagram",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Portada (Thumbnail)",
+          "info": "Si no subes video, se mostrará esta foto estática."
+        },
+        {
+          "type": "url",
+          "id": "video_url",
+          "label": "Enlace Interno o CDN del Archivo MP4",
+          "info": "Ve a Configuración > Archivos, sube tu MP4, copia el enlace y pégalo aquí. ¡Recomendado vídeos cortos de -5MB! (Opcional, si no lo pones usará solo la portada)."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Enlace hacia Instagram (Al hacer clic en el botón)"
+        },
+        {
+          "type": "text",
+          "id": "btn_text",
+          "label": "Texto del botón del video",
+          "default": "Ver Reel"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Poedagar — Galería Video",
+      "category": "Poedagar",
+      "blocks": [
+        { "type": "video" },
+        { "type": "video" },
+        { "type": "video" },
+        { "type": "video" }
+      ]
+    }
+  ]
+}
+{% endschema %}

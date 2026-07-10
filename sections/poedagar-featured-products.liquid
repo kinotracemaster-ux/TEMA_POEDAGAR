@@ -1,0 +1,461 @@
+{% comment %} ================================================
+  POEDAGAR — FEATURED PRODUCTS / POPULARES
+  Carrusel o cuadrícula de productos destacados.
+================================================ {% endcomment %}
+
+{%- assign s = section.settings -%}
+{%- assign sid = section.id -%}
+{%- assign collection = collections[s.collection] -%}
+
+<section id="poedagar-fp-{{ sid }}" class="poedagar-fp" style="background-color:{{ s.bg_color }};">
+  <div class="poedagar-fp__container" style="max-width: {{ s.max_width }}px;">
+    
+    <div class="poedagar-fp__header" style="text-align: {{ s.text_align }};">
+      {%- if s.eyebrow != blank -%}
+        <p class="poedagar-fp__eyebrow" style="color:{{ s.eyebrow_color }};">{{ s.eyebrow }}</p>
+      {%- endif -%}
+      {%- if s.title != blank -%}
+        <h2 class="poedagar-fp__title" style="color:{{ s.text_color }};">{{ s.title }}</h2>
+      {%- endif -%}
+      {%- if s.subtitle != blank -%}
+        <p class="poedagar-fp__subtitle" style="color:{{ s.text_color }}; opacity: 0.7;">{{ s.subtitle }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if s.collection != blank and collection.products_count > 0 -%}
+      <div class="poedagar-fp__grid" style="grid-template-columns: repeat({{ s.columns_desktop }}, 1fr);">
+        {%- for product in collection.products limit: s.product_limit -%}
+          {%- assign pid = product.id -%}
+          <div class="poedagar-fp__product" data-pid="{{ pid }}">
+
+            {%- comment %} Imagen principal — envuelta en <a> para navegar al producto {%- endcomment %}
+            <a href="{{ product.url | within: collection }}" class="poedagar-fp__image-link" tabindex="0">
+              <div class="poedagar-fp__product-image-wrap" id="imgwrap-{{ pid }}"
+                   style="aspect-ratio: {{ s.aspect_ratio }}; background-color: #f7f7f7; border-radius: {{ s.border_radius }}px;">
+                {%- if product.featured_image -%}
+                  <img
+                    id="mainimg-{{ pid }}"
+                    src="{{ product.featured_image | img_url: '600x' }}"
+                    alt="{{ product.title | escape }}"
+                    class="poedagar-fp__product-image main-img"
+                    loading="lazy"
+                    data-original="{{ product.featured_image | img_url: '600x' }}">
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'poedagar-fp__product-image placeholder-svg' }}
+                {%- endif -%}
+
+                {%- if product.compare_at_price > product.price -%}
+                  <div class="poedagar-fp__badge poedagar-fp__badge--sale">Oferta</div>
+                {%- endif -%}
+              </div>
+            </a>
+
+            {%- comment %} Info — título, variantes, precio {%- endcomment %}
+            <div class="poedagar-fp__product-info">
+              <a href="{{ product.url | within: collection }}" class="poedagar-fp__title-link">
+                <p class="poedagar-fp__product-title" style="color:{{ s.text_color }};">{{ product.title }}</p>
+              </a>
+
+              {%- if product.has_only_default_variant == false -%}
+                <div class="poedagar-fp__variants" data-target="mainimg-{{ pid }}">
+                  {%- assign max_variants = 4 -%}
+                  {%- assign variant_count = 0 -%}
+                  {%- for variant in product.variants -%}
+                    {%- if variant.image -%}
+                      {%- if variant_count < max_variants -%}
+                        <button
+                          type="button"
+                          class="poedagar-fp__variant-thumb"
+                          data-img-src="{{ variant.image | img_url: '600x' }}"
+                          data-img-alt="{{ variant.title | escape }}"
+                          aria-label="Ver variante {{ variant.title | escape }}"
+                        >
+                          <img src="{{ variant.image | img_url: '60x60', crop: 'center' }}" alt="{{ variant.title | escape }}" loading="lazy">
+                        </button>
+                      {%- endif -%}
+                      {%- assign variant_count = variant_count | plus: 1 -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+
+                  {%- if variant_count > 0 -%}
+                    <span class="poedagar-fp__variant-count">{{ variant_count }} col.</span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+              <div class="poedagar-fp__product-price" style="color:{{ s.text_color }};">
+                {%- if product.compare_at_price > product.price -%}
+                  <span class="poedagar-fp__price-compare">{{ product.compare_at_price | money }}</span>
+                {%- endif -%}
+                <span class="poedagar-fp__price-current">{{ product.price | money }}</span>
+              </div>
+            </div>
+
+          </div>
+        {%- endfor -%}
+      </div>
+      
+      {%- if s.show_view_all -%}
+        <div class="poedagar-fp__view-all" style="text-align: {{ s.text_align }};">
+          <a href="{{ collection.url }}" class="poedagar-fp__view-all-btn" style="background-color: {{ s.btn_bg_color }}; color: {{ s.btn_text_color }}; border-radius: {{ s.btn_radius }}px;">{{ 'Ver todo ' | append: collection.title }}</a>
+        </div>
+      {%- endif -%}
+      
+    {%- else -%}
+      <div class="poedagar-fp__empty" style="text-align:center; padding: 40px; color: {{ s.text_color }}; opacity: 0.7;">
+        Selecciona una colección en los ajustes para mostrar productos.
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+#poedagar-fp-{{ sid }} {
+  padding: {{ s.padding_v }}px 24px;
+}
+.poedagar-fp__container {
+  margin: 0 auto;
+  width: 100%;
+}
+.poedagar-fp__header {
+  margin-bottom: 48px;
+}
+.poedagar-fp__eyebrow {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 13px;
+  margin: 0 0 12px;
+}
+.poedagar-fp__title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-weight: 700;
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+.poedagar-fp__subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.poedagar-fp__header[style*="text-align: left"] .poedagar-fp__subtitle {
+  margin-left: 0;
+}
+
+.poedagar-fp__grid {
+  display: grid;
+  gap: {{ s.grid_gap }}px;
+}
+/* Tarjeta de producto */
+.poedagar-fp__product {
+  display: block;
+  cursor: default;
+}
+.poedagar-fp__image-link {
+  display: block;
+  text-decoration: none;
+}
+.poedagar-fp__title-link {
+  text-decoration: none;
+  color: inherit;
+}
+.poedagar-fp__product-image-wrap {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.poedagar-fp__product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.35s ease, transform 0.7s ease;
+}
+/* Zoom suave al pasar el mouse sobre la imagen */
+.poedagar-fp__image-link:hover .poedagar-fp__product-image {
+  transform: scale(1.04);
+}
+/* Imagen cambiada por JS -- transición suave */
+.poedagar-fp__product-image.is-swapping {
+  opacity: 0;
+}
+.poedagar-fp__product-image.is-swapped {
+  opacity: 1 !important;
+}
+
+.poedagar-fp__badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--dark, #1a1a1a);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 3px 8px;
+  border-radius: 3px;
+  z-index: 3;
+}
+.poedagar-fp__badge--sale {
+  background: var(--gold, #cfa85c);
+  color: #1a1a1a;
+}
+
+/* Info del producto */
+.poedagar-fp__product-info {
+  text-align: {{ s.card_align }};
+  padding: 0 2px;
+}
+
+/* Título — Inter compacto y legible */
+.poedagar-fp__product-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+  color: var(--text, #1a1a1a);
+}
+
+/* Contenedor de variantes */
+.poedagar-fp__variants {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  {% if s.card_align == 'center' %}justify-content: center;{% endif %}
+}
+
+/* Miniatura de variante — como botón */
+.poedagar-fp__variant-thumb {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  background: #f0f0f0;
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.25s ease, transform 0.2s ease;
+  flex-shrink: 0;
+}
+.poedagar-fp__variant-thumb:hover,
+.poedagar-fp__variant-thumb.active {
+  border-color: var(--gold, #cfa85c);
+  transform: scale(1.12);
+}
+.poedagar-fp__variant-thumb:hover {
+  transform: scale(1.1);
+}
+.poedagar-fp__variant-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.poedagar-fp__variant-count {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: #888;
+  font-style: italic;
+  margin-left: 4px;
+}
+
+.poedagar-fp__product-price {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.poedagar-fp__view-all {
+  margin-top: 50px;
+}
+.poedagar-fp__view-all-btn {
+  display: inline-block;
+  padding: 14px 36px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+.poedagar-fp__view-all-btn:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 992px) {
+  .poedagar-fp__grid { grid-template-columns: repeat(3, 1fr) !important; }
+}
+@media (max-width: 768px) {
+  .poedagar-fp__grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
+  #poedagar-fp-{{ sid }} { padding-top: 40px !important; padding-bottom: 40px !important; padding-left: 16px !important; padding-right: 16px !important; }
+  .poedagar-fp__header { margin-bottom: 32px; }
+}
+@media (max-width: 480px) {
+  {%- if s.mobile_layout == '1' -%}
+  .poedagar-fp__grid { grid-template-columns: 1fr !important; }
+  {%- endif -%}
+  .poedagar-fp__product-title { font-size: 11px; margin-bottom: 4px; }
+  .poedagar-fp__product-price { font-size: 13px; }
+  .poedagar-fp__variant-thumb { width: 24px; height: 24px; }
+  .poedagar-fp__view-all { margin-top: 32px; }
+  .poedagar-fp__title { font-size: 26px; }
+  .poedagar-fp__product-image-wrap { margin-bottom: 10px; }
+}
+
+/* Precio tachado */
+.poedagar-fp__price-compare {
+  opacity: 0.5;
+  text-decoration: line-through;
+  font-size: 0.88em;
+  margin-right: 6px;
+}
+</style>
+
+<script>
+(function() {
+  function initVariantSwap() {
+    var thumbContainers = document.querySelectorAll('.poedagar-fp__variants[data-target]');
+
+    thumbContainers.forEach(function(container) {
+      var targetId = container.getAttribute('data-target');
+      var mainImg  = document.getElementById(targetId);
+      if (!mainImg) return;
+
+      var thumbs = container.querySelectorAll('.poedagar-fp__variant-thumb');
+
+      function swapImage(btn) {
+        var newSrc = btn.getAttribute('data-img-src');
+        var newAlt = btn.getAttribute('data-img-alt');
+        if (!newSrc || mainImg.src.includes(newSrc.split('?')[0])) return;
+
+        // Quitar clase active de todos
+        thumbs.forEach(function(t) { t.classList.remove('active'); });
+        btn.classList.add('active');
+
+        // Fade out -> swap -> fade in
+        mainImg.classList.add('is-swapping');
+        setTimeout(function() {
+          mainImg.src = newSrc;
+          mainImg.alt = newAlt || mainImg.alt;
+          mainImg.onload = function() {
+            mainImg.classList.remove('is-swapping');
+          };
+          // fallback si onload no dispara
+          setTimeout(function() {
+            mainImg.classList.remove('is-swapping');
+          }, 400);
+        }, 180);
+      }
+
+      thumbs.forEach(function(btn) {
+        // Hover: swap de imagen
+        btn.addEventListener('mouseenter', function() {
+          swapImage(btn);
+        });
+        // Click: también swap (para táctil)
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          swapImage(btn);
+        });
+      });
+
+      // Al salir del contenedor de variantes -> restaurar imagen original
+      container.addEventListener('mouseleave', function() {
+        var original = mainImg.getAttribute('data-original');
+        if (original && !mainImg.src.includes(original.split('?')[0])) {
+          mainImg.classList.add('is-swapping');
+          setTimeout(function() {
+            mainImg.src = original;
+            mainImg.onload = function() { mainImg.classList.remove('is-swapping'); };
+            setTimeout(function() { mainImg.classList.remove('is-swapping'); }, 400);
+          }, 180);
+        }
+        thumbs.forEach(function(t) { t.classList.remove('active'); });
+      });
+    });
+  }
+
+  // Ejecutar al cargar el DOM
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initVariantSwap);
+  } else {
+    initVariantSwap();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Poedagar — Productos",
+  "settings": [
+    { "type": "header", "content": "Texto cabecera" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Los más deseados" },
+    { "type": "text", "id": "title", "label": "Título", "default": "Populares" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtítulo", "default": "Las piezas maestras que están marcando tendencia." },
+    { "type": "select", "id": "text_align", "label": "Alineación del texto", "default": "left",
+      "options": [
+        { "value": "left", "label": "Izquierda" },
+        { "value": "center", "label": "Centro" }
+      ]
+    },
+    { "type": "header", "content": "Productos" },
+    { "type": "collection", "id": "collection", "label": "Colección a mostrar" },
+    { "type": "range", "id": "product_limit", "label": "Límite de productos", "min": 2, "max": 12, "step": 1, "default": 4 },
+    { "type": "checkbox", "id": "show_secondary_image", "label": "Mostrar 2da imagen en hover", "default": true },
+    { "type": "select", "id": "card_align", "label": "Alineación en tarjeta", "default": "left",
+      "options": [
+        { "value": "left", "label": "Izquierda" },
+        { "value": "center", "label": "Centro" }
+      ]
+    },
+    { "type": "header", "content": "Colores e Interfaz" },
+    { "type": "color", "id": "bg_color", "label": "Color de fondo", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Color de textos", "default": "#1a1a1a" },
+    { "type": "color", "id": "eyebrow_color", "label": "Color eyebrow", "default": "#cfa85c" },
+    { "type": "header", "content": "Diseño de la Cuadrícula" },
+    { "type": "range", "id": "max_width", "label": "Ancho máximo (px)", "min": 800, "max": 1600, "step": 50, "default": 1300 },
+    { "type": "range", "id": "padding_v", "label": "Padding vertical (px)", "min": 20, "max": 160, "step": 10, "default": 80 },
+    { "type": "range", "id": "columns_desktop", "label": "Columnas en PC", "min": 2, "max": 5, "step": 1, "default": 4 },
+    { "type": "range", "id": "grid_gap", "label": "Espacio entre tarjetas (px)", "min": 10, "max": 60, "step": 5, "default": 30 },
+    { "type": "range", "id": "border_radius", "label": "Radio de bordes imágenes (px)", "min": 0, "max": 40, "step": 2, "default": 4 },
+    { "type": "select", "id": "aspect_ratio", "label": "Proporción de las imágenes", "default": "2/3",
+      "options": [
+        { "value": "1/1", "label": "1:1 (Cuadrado)" },
+        { "value": "2/3", "label": "2:3 (Retrato vertical)" },
+        { "value": "3/4", "label": "3:4 (Retrato más corto)" }
+      ]
+    },
+    { "type": "select", "id": "mobile_layout", "label": "Columnas en móvil", "default": "2",
+      "options": [
+        { "value": "1", "label": "1 Columna" },
+        { "value": "2", "label": "2 Columnas" }
+      ]
+    },
+    { "type": "header", "content": "Botón 'Ver todo'" },
+    { "type": "checkbox", "id": "show_view_all", "label": "Mostrar botón 'Ver todo'", "default": true },
+    { "type": "color", "id": "btn_bg_color", "label": "Fondo del botón", "default": "#1a1a1a" },
+    { "type": "color", "id": "btn_text_color", "label": "Texto del botón", "default": "#ffffff" },
+    { "type": "range", "id": "btn_radius", "label": "Radio de bordes botón (px)", "min": 0, "max": 40, "step": 2, "default": 2 }
+  ],
+  "presets": [
+    {
+      "name": "Poedagar — Productos",
+      "category": "Poedagar"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,253 @@
+{% comment %} ================================================
+  POEDAGAR — CATEGORÍAS POR ÍCONOS
+  Círculos/Cuadrados con efecto marca de agua y zoom hermoso.
+================================================ {% endcomment %}
+
+{%- assign s = section.settings -%}
+{%- assign sid = section.id -%}
+
+<section id="poedagar-icat-{{ sid }}" class="poedagar-icat" style="background-color:{{ s.bg_color }};">
+  <div class="poedagar-icat__container" style="max-width: {{ s.max_width }}px;">
+    
+    <div class="poedagar-icat__header" style="text-align: {{ s.text_align }};">
+      {%- if s.eyebrow != blank -%}
+        <p class="poedagar-icat__eyebrow" style="color:{{ s.eyebrow_color }};">{{ s.eyebrow }}</p>
+      {%- endif -%}
+      {%- if s.title != blank -%}
+        <h2 class="poedagar-icat__title" style="color:{{ s.text_color }};">{{ s.title }}</h2>
+      {%- endif -%}
+      {%- if s.subtitle != blank -%}
+        <p class="poedagar-icat__subtitle" style="color:{{ s.text_color }}; opacity: 0.7;">{{ s.subtitle }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="poedagar-icat__grid" style="grid-template-columns: repeat({{ s.columns_desktop }}, 1fr);">
+      {%- for block in section.blocks -%}
+        {%- assign col = collections[block.settings.collection] -%}
+        {%- assign bg_image = block.settings.image | default: col.image | default: col.products.first.featured_image -%}
+        {%- assign cat_title = block.settings.label | default: col.title | default: "Categoría" -%}
+        {%- assign cat_link = block.settings.url | default: col.url | default: "#" -%}
+
+        <a href="{{ cat_link }}" class="poedagar-icat__item" {{ block.shopify_attributes }}>
+          <div class="poedagar-icat__img-wrap" style="aspect-ratio: {{ s.aspect_ratio }}; border-radius: {{ s.shape_radius }}px;">
+            {%- if bg_image -%}
+              <img src="{{ bg_image | img_url: '400x400', crop: 'center' }}" alt="{{ cat_title | escape }}" class="poedagar-icat__img" loading="lazy">
+            {%- else -%}
+              <div class="poedagar-icat__placeholder"></div>
+            {%- endif -%}
+          </div>
+          <h3 class="poedagar-icat__item-title" style="color:{{ s.text_color }};">{{ cat_title }}</h3>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+#poedagar-icat-{{ sid }} {
+  padding: {{ s.padding_v }}px 24px;
+}
+.poedagar-icat__container {
+  margin: 0 auto;
+  width: 100%;
+}
+.poedagar-icat__header {
+  margin-bottom: 48px;
+}
+.poedagar-icat__eyebrow {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 13px;
+  margin: 0 0 12px;
+}
+.poedagar-icat__title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 3vw, 2.5rem);
+  font-weight: 700;
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+.poedagar-icat__subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+  font-weight: 300;
+}
+.poedagar-icat__header[style*="text-align: left"] .poedagar-icat__subtitle {
+  margin-left: 0;
+}
+.poedagar-icat__grid {
+  display: grid;
+  gap: {{ s.grid_gap }}px;
+  justify-content: center;
+}
+.poedagar-icat__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  group;
+  transition: transform 0.4s ease;
+}
+.poedagar-icat__img-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 220px; /* control the icon size */
+  margin: 0 auto 20px auto;
+  overflow: hidden;
+  background-color: #1a1a1a;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  border: 1px solid rgba(207, 168, 92, 0.15); /* very subtle gold border */
+  transition: all 0.5s ease;
+}
+.poedagar-icat__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Watermark effect */
+  opacity: {{ s.img_opacity }};
+  filter: grayscale({{ s.img_grayscale }}%) sepia(10%) contrast(1.1);
+  transform: scale(1);
+  transition: opacity 0.6s ease, filter 0.6s ease, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.poedagar-icat__placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #eee, #ccc);
+}
+/* Hover Effects */
+.poedagar-icat__item:hover .poedagar-icat__img-wrap {
+  border-color: rgba(207, 168, 92, 0.6);
+  box-shadow: 0 15px 40px rgba(207, 168, 92, 0.15);
+}
+.poedagar-icat__item:hover .poedagar-icat__img {
+  opacity: 1;
+  filter: grayscale(0%) sepia(0%) contrast(1);
+  transform: scale(1.12); /* Nice zoom */
+}
+.poedagar-icat__item-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-align: center;
+  transition: color 0.3s ease;
+  margin: 0;
+  position: relative;
+}
+.poedagar-icat__item-title::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background-color: #cfa85c;
+  transition: all 0.4s ease;
+  transform: translateX(-50%);
+}
+.poedagar-icat__item:hover .poedagar-icat__item-title {
+  color: #cfa85c !important;
+}
+.poedagar-icat__item:hover .poedagar-icat__item-title::after {
+  width: 100%;
+}
+
+@media (max-width: 992px) {
+  .poedagar-icat__grid { grid-template-columns: repeat(4, 1fr) !important; }
+}
+@media (max-width: 768px) {
+  .poedagar-icat__grid { grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; }
+  #poedagar-icat-{{ sid }} { padding-top: 50px !important; padding-bottom: 50px !important; }
+  .poedagar-icat__title { font-size: 28px; }
+}
+@media (max-width: 576px) {
+  .poedagar-icat__grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
+  .poedagar-icat__img-wrap { max-width: 140px; margin-bottom: 12px; }
+  .poedagar-icat__item-title { font-size: 11px; }
+  .poedagar-icat__title { font-size: 24px; }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Poedagar — Iconos Cat.",
+  "settings": [
+    { "type": "header", "content": "Texto cabecera" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Nuestras Líneas" },
+    { "type": "text", "id": "title", "label": "Título", "default": "Explorar por Estilo" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtítulo", "default": "Encuentra la elegancia que resuena con tu esencia." },
+    { "type": "select", "id": "text_align", "label": "Alineación del texto", "default": "center",
+      "options": [
+        { "value": "left", "label": "Izquierda" },
+        { "value": "center", "label": "Centro" }
+      ]
+    },
+    { "type": "header", "content": "Colores" },
+    { "type": "color", "id": "bg_color", "label": "Color de fondo", "default": "#fcfbf9" },
+    { "type": "color", "id": "text_color", "label": "Color de textos", "default": "#1a1a1a" },
+    { "type": "color", "id": "eyebrow_color", "label": "Color eyebrow", "default": "#cfa85c" },
+    { "type": "header", "content": "Diseño de la Cuadrícula" },
+    { "type": "range", "id": "max_width", "label": "Ancho máximo (px)", "min": 800, "max": 1600, "step": 50, "default": 1200 },
+    { "type": "range", "id": "padding_v", "label": "Padding vertical (px)", "min": 20, "max": 160, "step": 10, "default": 80 },
+    { "type": "range", "id": "columns_desktop", "label": "Íconos por fila (PC)", "min": 3, "max": 8, "step": 1, "default": 5 },
+    { "type": "range", "id": "grid_gap", "label": "Espacio entre íconos (px)", "min": 10, "max": 80, "step": 5, "default": 40 },
+    { "type": "header", "content": "Forma y Estilo (Iconos)" },
+    { "type": "select", "id": "aspect_ratio", "label": "Proporción de la imagen", "default": "1/1",
+      "options": [
+        { "value": "1/1", "label": "1:1 (Cuadrado/Círculo)" },
+        { "value": "4/5", "label": "4:5 (Vertical)" },
+        { "value": "3/4", "label": "3:4 (Retrato)" }
+      ]
+    },
+    { "type": "range", "id": "shape_radius", "label": "Redondeo bordes (px - usa 200 circular)", "min": 0, "max": 200, "step": 4, "default": 24 },
+    { "type": "range", "id": "img_opacity", "label": "Opacidad inicial (Marca de agua)", "min": 0.5, "max": 1.0, "step": 0.1, "default": 0.7 },
+    { "type": "range", "id": "img_grayscale", "label": "Desaturación inicial (%)", "min": 0, "max": 100, "step": 10, "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Ícono de Categoría",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Colección de la tienda"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen personalizada (Ícono)"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Título debajo del ícono"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Enlace manual (opcional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Poedagar — Iconos Cat.",
+      "category": "Poedagar",
+      "blocks": [
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" }
+      ]
+    }
+  ]
+}
+{% endschema %}

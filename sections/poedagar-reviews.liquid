@@ -1,0 +1,273 @@
+{% comment %} POEDAGAR — RESEÑAS / TESTIMONIOS
+  Grilla o carrusel de reseñas de clientes.
+  Integra con Judge.me / BK Reviews via metafield hook.
+  100% configurable desde Admin → Personalizar. {% endcomment %}
+
+{%- assign s = section.settings -%}
+{%- assign sid = section.id -%}
+
+<section id="poedagar-rev-{{ sid }}" class="poedagar-rev">
+
+  <!-- Encabezado -->
+  <div class="poedagar-rev__header" style="text-align:{{ s.header_align }};">
+    {%- if s.eyebrow != blank -%}
+      <p class="poedagar-rev__eyebrow" style="color:{{ s.eyebrow_color }};font-size:{{ s.eyebrow_size }}px;font-family:{{ s.text_font }};">{{ s.eyebrow }}</p>
+    {%- endif -%}
+    {%- if s.title != blank -%}
+      <h2 class="poedagar-rev__title" style="color:{{ s.heading_color }};font-family:{{ s.title_font }};font-size:clamp(1.5rem,{{ s.title_size }}vw,{{ s.title_size | times: 12 }}px);">{{ s.title }}</h2>
+    {%- endif -%}
+
+    {%- if s.show_summary -%}
+      <div class="poedagar-rev__summary">
+        <span class="poedagar-rev__avg" style="color:{{ s.star_color }};font-family:{{ s.title_font }};font-size:{{ s.avg_size }}px;">{{ s.avg_rating }}</span>
+        <span class="poedagar-rev__stars" style="color:{{ s.star_color }};font-size:{{ s.star_size }}px;">★★★★★</span>
+        <span class="poedagar-rev__count" style="color:{{ s.text_color }};font-size:{{ s.sub_size }}px;font-family:{{ s.text_font }};">{{ s.review_count }} {{ s.review_label }}</span>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <!-- App de reseñas hook (Judge.me / BK Reviews) -->
+  {%- if s.show_app_reviews -%}
+    <div class="poedagar-rev__app-hook" id="poedagar-reviews-app-{{ sid }}">
+      <!-- Judge.me / BK Reviews renderiza automáticamente aquí -->
+      {% render 'judgeme_widgets', widget_type: 'judgeme_all_reviews', concierge_install: true %}
+    </div>
+  {%- endif -%}
+
+  <!-- Reseñas manuales (bloques) -->
+  {%- if section.blocks.size > 0 and s.show_manual -%}
+    <div class="poedagar-rev__grid poedagar-rev__grid--{{ s.columns }}col{% if s.scroll_mode %} poedagar-rev__grid--scroll{% endif %}">
+      {%- for block in section.blocks -%}
+        {%- assign bk = block.settings -%}
+        <div class="poedagar-rev__card" style="background:{{ s.card_bg }};border-radius:{{ s.card_radius }}px;border:{{ s.border_w }}px solid {{ s.border_color }};" {{ block.shopify_attributes }}>
+
+          <!-- Estrellas -->
+          <div class="poedagar-rev__card-stars" style="color:{{ s.star_color }};font-size:{{ s.star_size }}px;">
+            {%- assign rating = bk.rating | default: 5 -%}
+            {%- for i in (1..5) -%}
+              {%- if i <= rating -%}★{%- else -%}☆{%- endif -%}
+            {%- endfor -%}
+          </div>
+
+          <!-- Texto reseña -->
+          {%- if bk.review_title != blank -%}
+            <p class="poedagar-rev__card-title" style="color:{{ s.card_heading_color }};font-family:{{ s.title_font }};font-size:{{ s.card_title_size }}px;">{{ bk.review_title }}</p>
+          {%- endif -%}
+          {%- if bk.review_text != blank -%}
+            <p class="poedagar-rev__card-text" style="color:{{ s.card_text_color }};font-size:{{ s.card_text_size }}px;font-family:{{ s.text_font }};">{{ bk.review_text }}</p>
+          {%- endif -%}
+
+          <!-- Autor -->
+          <div class="poedagar-rev__card-author">
+            {%- if bk.avatar -%}
+              <img src="{{ bk.avatar | img_url: '80x80', crop: 'center' }}" alt="{{ bk.author | escape }}" class="poedagar-rev__card-avatar" style="width:{{ s.avatar_size }}px;height:{{ s.avatar_size }}px;">
+            {%- else -%}
+              <div class="poedagar-rev__card-avatar poedagar-rev__card-avatar--initial" style="width:{{ s.avatar_size }}px;height:{{ s.avatar_size }}px;background:{{ s.eyebrow_color }};color:{{ s.card_bg }};font-family:{{ s.title_font }};font-size:{{ s.avatar_size | times: 0.4 | round }}px;">
+                {{ bk.author | upcase | slice: 0 }}
+              </div>
+            {%- endif -%}
+            <div>
+              <p class="poedagar-rev__card-name" style="color:{{ s.card_heading_color }};font-size:{{ s.card_text_size }}px;font-family:{{ s.title_font }};">{{ bk.author }}</p>
+              {%- if bk.location != blank -%}
+                <p class="poedagar-rev__card-location" style="color:{{ s.card_text_color }};font-size:{{ s.sub_size }}px;font-family:{{ s.text_font }};">{{ bk.location }}</p>
+              {%- endif -%}
+              {%- if bk.verified and s.show_verified -%}
+                <p class="poedagar-rev__card-verified" style="color:{{ s.verified_color }};font-size:{{ s.sub_size }}px;font-family:{{ s.text_font }};">{{ s.verified_text }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+
+          {%- if bk.product_name != blank -%}
+            <p class="poedagar-rev__card-product" style="color:{{ s.card_text_color }};font-size:{{ s.sub_size }}px;font-family:{{ s.text_font }};">{{ s.product_prefix }} {{ bk.product_name }}</p>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+</section>
+
+<style>
+#poedagar-rev-{{ sid }} {
+  background: {{ s.bg_color }};
+  padding: {{ s.pad_v }}px {{ s.pad_h }}px;
+}
+#poedagar-rev-{{ sid }} .poedagar-rev__header {
+  max-width: {{ s.max_w }}px;
+  margin: 0 auto {{ s.hdr_gap }}px;
+}
+#poedagar-rev-{{ sid }} .poedagar-rev__eyebrow {
+  letter-spacing:.2em; text-transform:uppercase; font-weight:600; margin:0 0 12px;
+}
+#poedagar-rev-{{ sid }} .poedagar-rev__title {
+  font-weight:700; line-height:1.2; margin:0 0 16px;
+}
+#poedagar-rev-{{ sid }} .poedagar-rev__summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: {{ s.summary_bg }};
+  padding: 10px 20px;
+  border-radius: 30px;
+}
+#poedagar-rev-{{ sid }} .poedagar-rev__avg { font-weight:700; line-height:1; }
+#poedagar-rev-{{ sid }} .poedagar-rev__stars { letter-spacing:2px; }
+#poedagar-rev-{{ sid }} .poedagar-rev__count { opacity:.75; }
+
+#poedagar-rev-{{ sid }} .poedagar-rev__grid {
+  max-width: {{ s.max_w }}px;
+  margin: 0 auto;
+  display: grid;
+  gap: {{ s.card_gap }}px;
+}
+#poedagar-rev-{{ sid }} .poedagar-rev__grid--2col { grid-template-columns: repeat(2,1fr); }
+#poedagar-rev-{{ sid }} .poedagar-rev__grid--3col { grid-template-columns: repeat(3,1fr); }
+#poedagar-rev-{{ sid }} .poedagar-rev__grid--4col { grid-template-columns: repeat(4,1fr); }
+#poedagar-rev-{{ sid }} .poedagar-rev__grid--scroll {
+  grid-template-columns: unset;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 12px;
+}
+#poedagar-rev-{{ sid }} .poedagar-rev__grid--scroll::-webkit-scrollbar { display:none; }
+#poedagar-rev-{{ sid }} .poedagar-rev__grid--scroll .poedagar-rev__card {
+  min-width: {{ s.scroll_card_w }}px;
+  scroll-snap-align: start;
+}
+
+#poedagar-rev-{{ sid }} .poedagar-rev__card {
+  padding: {{ s.card_pad }}px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: box-shadow .3s;
+}
+#poedagar-rev-{{ sid }} .poedagar-rev__card:hover { box-shadow: {{ s.hover_shadow }}; }
+
+#poedagar-rev-{{ sid }} .poedagar-rev__card-stars { letter-spacing:2px; }
+#poedagar-rev-{{ sid }} .poedagar-rev__card-title { font-weight:600; margin:0; line-height:1.3; }
+#poedagar-rev-{{ sid }} .poedagar-rev__card-text  { line-height:1.7; margin:0; flex:1; }
+#poedagar-rev-{{ sid }} .poedagar-rev__card-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+}
+#poedagar-rev-{{ sid }} .poedagar-rev__card-avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+#poedagar-rev-{{ sid }} .poedagar-rev__card-avatar--initial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+#poedagar-rev-{{ sid }} .poedagar-rev__card-name     { font-weight:600; margin:0 0 2px; }
+#poedagar-rev-{{ sid }} .poedagar-rev__card-location { margin:0; opacity:.65; }
+#poedagar-rev-{{ sid }} .poedagar-rev__card-verified { margin:0; font-weight:600; }
+#poedagar-rev-{{ sid }} .poedagar-rev__card-product  { margin:0; opacity:.5; font-style:italic; margin-top:-4px; }
+#poedagar-rev-{{ sid }} .poedagar-rev__app-hook { max-width:{{ s.max_w }}px; margin:0 auto; }
+
+@media(max-width:900px){
+  #poedagar-rev-{{ sid }} .poedagar-rev__grid--3col,
+  #poedagar-rev-{{ sid }} .poedagar-rev__grid--4col { grid-template-columns:repeat(2,1fr); }
+}
+@media(max-width:540px){
+  #poedagar-rev-{{ sid }} .poedagar-rev__grid--2col,
+  #poedagar-rev-{{ sid }} .poedagar-rev__grid--3col,
+  #poedagar-rev-{{ sid }} .poedagar-rev__grid--4col { grid-template-columns:1fr; }
+}
+</style>
+
+{% schema %}
+{
+  "name":"Poedagar — Reseñas",
+  "settings":[
+    {"type":"header","content":"⭐ Fuente de reseñas"},
+    {"type":"checkbox","id":"show_app_reviews","label":"Mostrar reseñas de Judge.me / BK Reviews (app instalada)","default":false,"info":"Actívalo solo si tienes Judge.me instalado. Las reseñas aparecerán automáticamente."},
+    {"type":"checkbox","id":"show_manual","label":"Mostrar reseñas manuales (bloques)","default":true},
+    {"type":"header","content":"🎨 Fondo y layout"},
+    {"type":"color","id":"bg_color","label":"Fondo sección","default":"#fcfbf9"},
+    {"type":"range","id":"pad_v","label":"Padding vertical","min":0,"max":160,"step":8,"default":72},
+    {"type":"range","id":"pad_h","label":"Padding horizontal","min":0,"max":80,"step":8,"default":24},
+    {"type":"range","id":"max_w","label":"Ancho máx (px)","min":800,"max":1600,"step":40,"default":1280},
+    {"type":"header","content":"📝 Encabezado"},
+    {"type":"select","id":"header_align","label":"Alineación","default":"center","options":[{"value":"left","label":"Izquierda"},{"value":"center","label":"Centro"},{"value":"right","label":"Derecha"}]},
+    {"type":"range","id":"hdr_gap","label":"Espacio →tarjetas","min":16,"max":80,"step":4,"default":48},
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"Lo que dicen nuestros clientes"},
+    {"type":"color","id":"eyebrow_color","label":"Color eyebrow","default":"#cfa85c"},
+    {"type":"range","id":"eyebrow_size","label":"Tamaño eyebrow","min":10,"max":18,"step":1,"default":12},
+    {"type":"textarea","id":"title","label":"Título","default":"Más de 50,000 clientes satisfechos"},
+    {"type":"color","id":"heading_color","label":"Color título","default":"#1a1a1a"},
+    {"type":"range","id":"title_size","label":"Tamaño título (vw)","min":2,"max":5,"step":1,"default":3},
+    {"type":"text","id":"title_font","label":"Fuente títulos","default":"'Playfair Display', serif"},
+    {"type":"text","id":"text_font","label":"Fuente texto","default":"'Inter', sans-serif"},
+    {"type":"color","id":"text_color","label":"Color subtextos","default":"#777777"},
+    {"type":"range","id":"sub_size","label":"Tamaño subtexto (px)","min":10,"max":16,"step":1,"default":12},
+    {"type":"header","content":"📊 Resumen de puntuación"},
+    {"type":"checkbox","id":"show_summary","label":"Mostrar resumen de puntuación","default":true},
+    {"type":"text","id":"avg_rating","label":"Puntuación promedio","default":"4.9"},
+    {"type":"text","id":"review_count","label":"Total de reseñas","default":"1,248"},
+    {"type":"text","id":"review_label","label":"Texto tras el número","default":"reseñas verificadas"},
+    {"type":"range","id":"avg_size","label":"Tamaño número promedio (px)","min":20,"max":48,"step":2,"default":32},
+    {"type":"range","id":"star_size","label":"Tamaño estrellas (px)","min":12,"max":28,"step":2,"default":18},
+    {"type":"color","id":"star_color","label":"Color estrellas","default":"#cfa85c"},
+    {"type":"color","id":"summary_bg","label":"Fondo resumen","default":"rgba(207,168,92,0.1)"},
+    {"type":"header","content":"🗂️ Grid"},
+    {"type":"select","id":"columns","label":"Columnas","default":"3","options":[{"value":"2","label":"2"},{"value":"3","label":"3"},{"value":"4","label":"4"}]},
+    {"type":"range","id":"card_gap","label":"Espacio entre tarjetas","min":8,"max":40,"step":4,"default":20},
+    {"type":"checkbox","id":"scroll_mode","label":"Modo scroll horizontal (carrusel)","default":false},
+    {"type":"range","id":"scroll_card_w","label":"Ancho tarjeta en scroll (px)","min":240,"max":500,"step":20,"default":320},
+    {"type":"header","content":"🃏 Tarjeta"},
+    {"type":"color","id":"card_bg","label":"Fondo tarjeta","default":"#ffffff"},
+    {"type":"range","id":"card_radius","label":"Radio (px)","min":0,"max":24,"step":2,"default":12},
+    {"type":"range","id":"border_w","label":"Grosor borde","min":0,"max":3,"step":1,"default":1},
+    {"type":"color","id":"border_color","label":"Color borde","default":"#eeeeee"},
+    {"type":"range","id":"card_pad","label":"Padding (px)","min":12,"max":48,"step":4,"default":24},
+    {"type":"text","id":"hover_shadow","label":"Sombra hover","default":"0 8px 30px rgba(0,0,0,0.08)"},
+    {"type":"color","id":"card_heading_color","label":"Color título y nombre","default":"#1a1a1a"},
+    {"type":"range","id":"card_title_size","label":"Tamaño título reseña","min":13,"max":22,"step":1,"default":16},
+    {"type":"color","id":"card_text_color","label":"Color texto reseña","default":"#555555"},
+    {"type":"range","id":"card_text_size","label":"Tamaño texto (px)","min":13,"max":18,"step":1,"default":15},
+    {"type":"range","id":"avatar_size","label":"Tamaño avatar (px)","min":32,"max":64,"step":4,"default":44},
+    {"type":"header","content":"✅ Verificado"},
+    {"type":"checkbox","id":"show_verified","label":"Mostrar badge verificado","default":true},
+    {"type":"text","id":"verified_text","label":"Texto verificado","default":"✓ Compra verificada"},
+    {"type":"color","id":"verified_color","label":"Color verificado","default":"#38a169"},
+    {"type":"text","id":"product_prefix","label":"Texto antes del producto","default":"Compró:"}
+  ],
+  "blocks":[
+    {
+      "type":"review","name":"Reseña",
+      "settings":[
+        {"type":"range","id":"rating","label":"Calificación (estrellas)","min":1,"max":5,"step":1,"default":5},
+        {"type":"text","id":"review_title","label":"Título de la reseña","default":"¡Excelente reloj!"},
+        {"type":"textarea","id":"review_text","label":"Texto de la reseña","default":"La calidad es impresionante, llegó bien empacado y el diseño es exactamente como en las fotos. Lo recomiendo ampliamente."},
+        {"type":"image_picker","id":"avatar","label":"Foto del cliente (opcional)"},
+        {"type":"text","id":"author","label":"Nombre del cliente","default":"Carlos M."},
+        {"type":"text","id":"location","label":"Ciudad / País","default":"Ciudad de México, MX"},
+        {"type":"checkbox","id":"verified","label":"Compra verificada","default":true},
+        {"type":"text","id":"product_name","label":"Nombre del producto (opcional)"}
+      ]
+    }
+  ],
+  "max_blocks":12,
+  "presets":[
+    {
+      "name":"Reseñas de Clientes","category":"Poedagar",
+      "blocks":[
+        {"type":"review","settings":{"author":"Carlos M.","location":"Ciudad de México","review_title":"Increíble calidad","review_text":"Superó mis expectativas. El reloj se ve y se siente premium.","rating":5}},
+        {"type":"review","settings":{"author":"Laura G.","location":"Bogotá, Colombia","review_title":"Perfecto para regalo","review_text":"Lo regalé a mi esposo y quedó encantado. Llegó muy bien empacado.","rating":5}},
+        {"type":"review","settings":{"author":"Andrés P.","location":"Buenos Aires, AR","review_title":"Diseño elegante","review_text":"El acabado en acero es impecable. Lo uso todos los días.","rating":5}}
+      ]
+    }
+  ]
+}
+{% endschema %}

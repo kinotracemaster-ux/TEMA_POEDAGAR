@@ -1,0 +1,184 @@
+{% comment %} ========================================================
+   POEDAGAR — RECOMENDACIONES DE PRODUCTO (ESTILO PREMIUM)
+======================================================== {% endcomment %}
+
+{%- capture section_settings -%}
+{
+  "stackable": false,
+  "layout": "vertical",
+  "productId": {{ product.id | json }},
+  "useRecommendations": {% if product.metafields.sf_related_products.enabled == 1 %}false{% else %}true{% endif %},
+  "recommendationsCount": {{ section.settings.limit }}
+}
+{%- endcapture -%}
+
+{%- assign s = section.settings -%}
+{%- assign sid = section.id -%}
+
+{%- if section.settings.show_product_recommendations -%}
+<section id="poedagar-rec-{{ sid }}" class="poedagar-fp poedagar-rec section" data-section-id="{{ section.id }}" data-section-type="product-recommendations" data-section-settings='{{ section_settings }}'>
+  
+    <div class="product-recommendations" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ s.limit }}">
+      {%- if recommendations.performed and recommendations.products_count > 0 -%}
+        
+        <div class="poedagar-fp__header poedagar-fp__header--{{ s.header_align }}">
+          {%- if s.eyebrow != blank -%}
+            <p class="poedagar-fp__eyebrow" style="color:{{ s.eyebrow_color }};font-size:{{ s.eyebrow_size }}px;font-family:{{ s.text_font }};">{{ s.eyebrow }}</p>
+          {%- endif -%}
+          {%- if s.title != blank -%}
+            <h2 class="poedagar-fp__title" style="color:{{ s.heading_color }};font-family:{{ s.title_font }};font-size:clamp(1.5rem,{{ s.title_size }}vw,{{ s.title_size | times: 12 }}px);">{{ s.title }}</h2>
+          {%- endif -%}
+          {%- if s.subtitle != blank -%}
+            <p class="poedagar-fp__sub" style="color:{{ s.text_color }};font-size:{{ s.sub_size }}px;font-family:{{ s.text_font }};">{{ s.subtitle }}</p>
+          {%- endif -%}
+        </div>
+
+        <div class="poedagar-fp__grid poedagar-fp__grid--{{ s.columns }}col">
+          {%- for prod in recommendations.products limit: s.limit -%}
+            {%- assign on_sale = false -%}
+            {%- if prod.compare_at_price > prod.price -%}{%- assign on_sale = true -%}{%- endif -%}
+            <a href="{{ prod.url }}" class="poedagar-fp-card">
+              <div class="poedagar-fp-card__img-wrap">
+                {%- if prod.featured_image -%}
+                  <img src="{{ prod.featured_image | img_url: '600x' }}" alt="{{ prod.featured_image.alt | escape }}" loading="lazy" class="poedagar-fp-card__img">
+                {%- endif -%}
+                {%- if on_sale and s.show_sale -%}
+                  <span class="poedagar-fp-card__badge" style="background:{{ s.sale_bg }};color:{{ s.sale_color }};">{{ s.sale_text }}</span>
+                {%- elsif prod.available == false -%}
+                  <span class="poedagar-fp-card__badge" style="background:#555;color:#fff;">{{ s.sold_text }}</span>
+                {%- endif -%}
+                <div class="poedagar-fp-card__quick-wrap">
+                  <span class="poedagar-fp-card__add" style="background:{{ s.add_bg }};color:{{ s.add_color }};border-radius:{{ s.btn_radius }}px;">{{ s.quick_text }}</span>
+                </div>
+              </div>
+              <div class="poedagar-fp-card__info">
+                {%- if s.show_vendor -%}<p class="poedagar-fp-card__vendor">{{ prod.vendor }}</p>{%- endif -%}
+                <span class="poedagar-fp-card__name" style="color:{{ s.name_color }};font-size:{{ s.name_size }}px;font-family:{{ s.title_font }};">{{ prod.title }}</span>
+                <div class="poedagar-fp-card__row">
+                  <span class="poedagar-fp-card__price" style="color:{{ s.price_color }};font-size:{{ s.price_size }}px;">{{ prod.price | money }}</span>
+                  {%- if on_sale -%}<span class="poedagar-fp-card__compare">{{ prod.compare_at_price | money }}</span>{%- endif -%}
+                  {%- if s.show_stars -%}<span class="poedagar-fp-card__stars" style="color:{{ s.star_color }};">★★★★★</span>{%- endif -%}
+                </div>
+              </div>
+            </a>
+          {%- endfor -%}
+        </div>
+
+      {%- endif -%}
+    </div>
+</section>
+{%- endif -%}
+
+<style>
+#poedagar-rec-{{ sid }} { background:{{ s.bg_color }}; padding:{{ s.pad_v }}px {{ s.pad_h }}px; }
+#poedagar-rec-{{ sid }} .poedagar-fp__header { max-width:{{ s.max_w }}px; margin:0 auto {{ s.hdr_gap }}px; text-align:{{ s.header_align }}; }
+#poedagar-rec-{{ sid }} .poedagar-fp__eyebrow { letter-spacing:.2em; text-transform:uppercase; font-weight:600; margin:0 0 12px; }
+#poedagar-rec-{{ sid }} .poedagar-fp__title   { font-weight:700; line-height:1.2; margin:0 0 12px; }
+#poedagar-rec-{{ sid }} .poedagar-fp__sub     { opacity:.75; line-height:1.6; margin:0; }
+#poedagar-rec-{{ sid }} .poedagar-fp__header--center .poedagar-fp__sub { max-width:540px; margin:0 auto; }
+
+#poedagar-rec-{{ sid }} .poedagar-fp__grid { max-width:{{ s.max_w }}px; margin:0 auto; display:grid; gap:{{ s.gap }}px; }
+#poedagar-rec-{{ sid }} .poedagar-fp__grid--2col { grid-template-columns:repeat(2,1fr); }
+#poedagar-rec-{{ sid }} .poedagar-fp__grid--3col { grid-template-columns:repeat(3,1fr); }
+#poedagar-rec-{{ sid }} .poedagar-fp__grid--4col { grid-template-columns:repeat(4,1fr); }
+
+#poedagar-rec-{{ sid }} .poedagar-fp-card { display:flex; flex-direction:column; text-decoration:none; background:{{ s.card_bg }}; border-radius:{{ s.card_radius }}px; overflow:hidden; border:{{ s.border_w }}px solid {{ s.border_color }}; transition:box-shadow .3s,transform .3s; }
+#poedagar-rec-{{ sid }} .poedagar-fp-card:hover { box-shadow:{{ s.hover_shadow }}; transform:translateY(-{{ s.lift }}px); }
+
+#poedagar-rec-{{ sid }} .poedagar-fp-card__img-wrap { position:relative; overflow:hidden; height:{{ s.img_h }}px; }
+#poedagar-rec-{{ sid }} .poedagar-fp-card__img { width:100%; height:100%; object-fit:cover; display:block; transition:transform {{ s.zoom_spd | divided_by: 10.0 }}s ease; }
+#poedagar-rec-{{ sid }} .poedagar-fp-card:hover .poedagar-fp-card__img { transform:scale({{ s.zoom | divided_by: 100.0 | plus: 1 }}); }
+
+#poedagar-rec-{{ sid }} .poedagar-fp-card__badge { position:absolute; top:12px; left:12px; z-index:2; font-size:{{ s.badge_sz }}px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:4px 10px; border-radius:{{ s.badge_r }}px; font-family:{{ s.text_font }}; }
+
+#poedagar-rec-{{ sid }} .poedagar-fp-card__quick-wrap { position:absolute; bottom:0; left:0; right:0; z-index:2; display:flex; justify-content:center; padding:14px; background:linear-gradient(to top,{{ s.quick_bg }} 60%,rgba(0,0,0,0)); transform:translateY(100%); transition:transform .35s ease; }
+#poedagar-rec-{{ sid }} .poedagar-fp-card:hover .poedagar-fp-card__quick-wrap { transform:translateY(0); }
+#poedagar-rec-{{ sid }} .poedagar-fp-card__add { display:inline-flex; align-items:center; gap:6px; font-size:{{ s.badge_sz }}px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:10px 20px; cursor:pointer; font-family:{{ s.text_font }}; }
+
+#poedagar-rec-{{ sid }} .poedagar-fp-card__info { padding:{{ s.card_pad }}px; flex:1; display:flex; flex-direction:column; }
+#poedagar-rec-{{ sid }} .poedagar-fp-card__vendor { font-size:{{ s.badge_sz }}px; letter-spacing:.1em; text-transform:uppercase; color:{{ s.vendor_color }}; margin:0 0 6px; opacity:.65; font-family:{{ s.text_font }}; }
+#poedagar-rec-{{ sid }} .poedagar-fp-card__name { font-weight:600; line-height:1.3; display:block; margin:0 0 10px; }
+#poedagar-rec-{{ sid }} .poedagar-fp-card__row { display:flex; align-items:center; gap:10px; margin-top:auto; }
+#poedagar-rec-{{ sid }} .poedagar-fp-card__compare { font-size:{{ s.price_size | minus: 2 }}px; text-decoration:line-through; opacity:.5; color:{{ s.text_color }}; }
+#poedagar-rec-{{ sid }} .poedagar-fp-card__stars { margin-left:auto; letter-spacing:2px; font-size:12px; }
+
+@media(max-width:900px){
+  #poedagar-rec-{{ sid }} .poedagar-fp__grid--4col,
+  #poedagar-rec-{{ sid }} .poedagar-fp__grid--3col { grid-template-columns:repeat(2,1fr); }
+}
+@media(max-width:540px){
+  #poedagar-rec-{{ sid }} .poedagar-fp__grid--4col,
+  #poedagar-rec-{{ sid }} .poedagar-fp__grid--3col,
+  #poedagar-rec-{{ sid }} .poedagar-fp__grid--2col { grid-template-columns:1fr; }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Productos Recomendados",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_product_recommendations",
+      "label": "Mostrar recomendaciones dinámicas",
+      "default": true
+    },
+    { "type": "range", "id": "limit", "label": "Máx productos a mostrar", "min": 2, "max": 12, "step": 1, "default": 4 },
+    { "type": "header", "content": "🎨 Layout" },
+    { "type": "color", "id": "bg_color", "label": "Fondo", "default": "#fcfbf9" },
+    { "type": "range", "id": "pad_v", "label": "Padding vertical", "min": 0, "max": 160, "step": 8, "default": 72 },
+    { "type": "range", "id": "pad_h", "label": "Padding horizontal", "min": 0, "max": 80, "step": 8, "default": 24 },
+    { "type": "range", "id": "max_w", "label": "Ancho máx (px)", "min": 800, "max": 1600, "step": 40, "default": 1280 },
+    { "type": "select", "id": "columns", "label": "Columnas", "default": "4", "options": [{ "value": "2", "label": "2" }, { "value": "3", "label": "3" }, { "value": "4", "label": "4" }] },
+    { "type": "range", "id": "gap", "label": "Espacio entre tarjetas", "min": 8, "max": 40, "step": 4, "default": 20 },
+    { "type": "header", "content": "📝 Encabezado" },
+    { "type": "select", "id": "header_align", "label": "Alineación", "default": "center", "options": [{ "value": "left", "label": "Izquierda" }, { "value": "center", "label": "Centro" }, { "value": "right", "label": "Derecha" }] },
+    { "type": "range", "id": "hdr_gap", "label": "Espacio encabezado→grid", "min": 16, "max": 80, "step": 4, "default": 48 },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Para ti" },
+    { "type": "color", "id": "eyebrow_color", "label": "Color eyebrow", "default": "#cfa85c" },
+    { "type": "range", "id": "eyebrow_size", "label": "Tamaño eyebrow", "min": 10, "max": 18, "step": 1, "default": 12 },
+    { "type": "textarea", "id": "title", "label": "Título", "default": "Añadir a tu colección" },
+    { "type": "color", "id": "heading_color", "label": "Color título", "default": "#1a1a1a" },
+    { "type": "range", "id": "title_size", "label": "Tamaño título (vw)", "min": 2, "max": 5, "step": 1, "default": 3 },
+    { "type": "text", "id": "subtitle", "label": "Subtítulo" },
+    { "type": "color", "id": "text_color", "label": "Color texto", "default": "#777777" },
+    { "type": "range", "id": "sub_size", "label": "Tamaño subtítulo", "min": 12, "max": 20, "step": 1, "default": 15 },
+    { "type": "text", "id": "title_font", "label": "Fuente títulos", "default": "'Playfair Display', serif" },
+    { "type": "text", "id": "text_font", "label": "Fuente texto", "default": "'Inter', sans-serif" },
+    { "type": "header", "content": "🃏 Tarjeta" },
+    { "type": "color", "id": "card_bg", "label": "Fondo tarjeta", "default": "#ffffff" },
+    { "type": "range", "id": "card_radius", "label": "Radio (px)", "min": 0, "max": 20, "step": 2, "default": 8 },
+    { "type": "range", "id": "border_w", "label": "Grosor borde", "min": 0, "max": 3, "step": 1, "default": 1 },
+    { "type": "color", "id": "border_color", "label": "Color borde", "default": "#eeeeee" },
+    { "type": "range", "id": "img_h", "label": "Altura imagen (px)", "min": 180, "max": 600, "step": 20, "default": 280 },
+    { "type": "range", "id": "card_pad", "label": "Padding info (px)", "min": 8, "max": 32, "step": 4, "default": 16 },
+    { "type": "text", "id": "hover_shadow", "label": "Sombra hover", "default": "0 12px 40px rgba(0,0,0,0.1)" },
+    { "type": "range", "id": "lift", "label": "Elevación hover (px)", "min": 0, "max": 12, "step": 1, "default": 4 },
+    { "type": "range", "id": "zoom", "label": "Zoom hover (%)", "min": 0, "max": 15, "step": 1, "default": 5 },
+    { "type": "range", "id": "zoom_spd", "label": "Velocidad zoom", "min": 3, "max": 8, "step": 1, "default": 5 },
+    { "type": "header", "content": "💰 Precios y nombre" },
+    { "type": "color", "id": "name_color", "label": "Color nombre", "default": "#1a1a1a" },
+    { "type": "range", "id": "name_size", "label": "Tamaño nombre (px)", "min": 13, "max": 22, "step": 1, "default": 16 },
+    { "type": "color", "id": "price_color", "label": "Color precio", "default": "#1a1a1a" },
+    { "type": "range", "id": "price_size", "label": "Tamaño precio (px)", "min": 13, "max": 22, "step": 1, "default": 17 },
+    { "type": "color", "id": "vendor_color", "label": "Color vendor", "default": "#999999" },
+    { "type": "checkbox", "id": "show_vendor", "label": "Mostrar vendor", "default": true },
+    { "type": "checkbox", "id": "show_stars", "label": "Mostrar estrellas", "default": true },
+    { "type": "color", "id": "star_color", "label": "Color estrellas", "default": "#cfa85c" },
+    { "type": "header", "content": "🏷️ Badges" },
+    { "type": "checkbox", "id": "show_sale", "label": "Badge oferta", "default": true },
+    { "type": "text", "id": "sale_text", "label": "Texto oferta", "default": "Oferta" },
+    { "type": "color", "id": "sale_bg", "label": "Fondo badge oferta", "default": "#e53e3e" },
+    { "type": "color", "id": "sale_color", "label": "Texto badge oferta", "default": "#ffffff" },
+    { "type": "text", "id": "sold_text", "label": "Texto agotado", "default": "Agotado" },
+    { "type": "range", "id": "badge_sz", "label": "Tamaño badge (px)", "min": 9, "max": 14, "step": 1, "default": 10 },
+    { "type": "range", "id": "badge_r", "label": "Radio badge (px)", "min": 0, "max": 20, "step": 2, "default": 20 },
+    { "type": "header", "content": "🛒 Quick-add" },
+    { "type": "text", "id": "quick_text", "label": "Texto quick-add", "default": "Ver producto" },
+    { "type": "color", "id": "add_bg", "label": "Fondo botón", "default": "#cfa85c" },
+    { "type": "color", "id": "add_color", "label": "Texto botón", "default": "#1a1a1a" },
+    { "type": "color", "id": "quick_bg", "label": "Gradiente quick", "default": "rgba(0,0,0,0.8)" },
+    { "type": "range", "id": "btn_radius", "label": "Radio botón", "min": 0, "max": 30, "step": 2, "default": 2 }
+  ]
+}
+{% endschema %}

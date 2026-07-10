@@ -1,0 +1,298 @@
+{% comment %}
+  ============================================================
+  POEDAGAR — SEO & AI DISCOVERABILITY SNIPPET
+  Añade datos estructurados JSON-LD para:
+  - Google Search (ricos resultados)
+  - Gemini / ChatGPT (datos del negocio)
+  - Redes sociales (Open Graph mejorado)
+  ============================================================
+{% endcomment %}
+
+{%- assign store_name = shop.name | default: 'Poedagar Colombia' -%}
+{%- assign store_description = 'Tienda oficial de relojes Poedagar en Colombia. Precisión, lujo y estilo en cada pieza. Relojes de cuarzo y automáticos para hombre y mujer con garantía oficial.' -%}
+{%- assign store_url = shop.url -%}
+{%- assign store_email = 'contacto@poedagar.com.co' -%}
+{%- assign store_phone = '+57 314 6961737' -%}
+{%- assign store_country = 'CO' -%}
+{%- assign store_locale = 'es-CO' -%}
+{%- assign store_city = 'Bogotá' -%}
+
+{%- comment %} ── 1. ORGANIZACIÓN / EMPRESA ── {% endcomment %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "{{ store_name | escape }}",
+  "alternateName": "Poedagar Colombia",
+  "description": "{{ store_description | escape }}",
+  "url": "{{ store_url }}",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "{{ settings.logo | default: '' | img_url: '200x' | prepend: 'https:' }}",
+    "width": 200,
+    "height": 60
+  },
+  "sameAs": [
+    "https://www.instagram.com/poedagarcolombia",
+    "https://www.facebook.com/poedagarcolombia",
+    "https://www.tiktok.com/@poedagarcolombia"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer support",
+    "availableLanguage": "Spanish",
+    "areaServed": "CO"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "{{ store_city }}",
+    "addressRegion": "Cundinamarca",
+    "addressCountry": "{{ store_country }}"
+  },
+  "telephone": "{{ store_phone }}",
+  "foundingDate": "2020",
+  "numberOfEmployees": {
+    "@type": "QuantitativeValue",
+    "minValue": 1,
+    "maxValue": 50
+  }
+}
+</script>
+
+{%- comment %} ── 2. TIENDA EN LÍNEA ── {% endcomment %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "OnlineStore",
+  "name": "{{ store_name | escape }}",
+  "description": "{{ store_description | escape }}",
+  "url": "{{ store_url }}",
+  "currenciesAccepted": "COP",
+  "paymentAccepted": "Tarjeta de crédito, PSE, Efectivo, Transferencia bancaria",
+  "priceRange": "$$$",
+  "inLanguage": "{{ store_locale }}",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Catálogo de Relojes Poedagar",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Product",
+          "name": "Relojes Poedagar para Hombre"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Product",
+          "name": "Relojes Poedagar para Mujer"
+        }
+      }
+    ]
+  }
+}
+</script>
+
+{%- comment %} ── 3. PÁGINA WEB ── {% endcomment %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "{{ store_name | escape }}",
+  "url": "{{ store_url }}",
+  "description": "{{ store_description | escape }}",
+  "inLanguage": "{{ store_locale }}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "{{ store_url }}/search?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+{%- comment %} ── 4. DATOS ESPECÍFICOS POR TIPO DE PÁGINA ── {% endcomment %}
+
+{%- if request.page_type == 'index' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "{{ store_url }}/#webpage",
+  "url": "{{ store_url }}",
+  "name": "Poedagar Colombia — Relojes Oficiales de Lujo",
+  "description": "{{ store_description | escape }}",
+  "inLanguage": "{{ store_locale }}",
+  "isPartOf": {
+    "@type": "WebSite",
+    "url": "{{ store_url }}"
+  },
+  "about": {
+    "@type": "Organization",
+    "name": "{{ store_name | escape }}"
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "{{ store_url }}"
+      }
+    ]
+  }
+}
+</script>
+
+{%- elsif request.page_type == 'product' and product -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "{{ product.title | escape }}",
+  "description": "{{ product.description | strip_html | truncatewords: 200 | escape }}",
+  "sku": "{{ product.selected_or_first_available_variant.sku | escape }}",
+  "brand": {
+    "@type": "Brand",
+    "name": "Poedagar"
+  },
+  "image": [
+    {%- for image in product.images limit: 5 -%}
+      "https:{{ image | img_url: 'master' }}"{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ],
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "{{ cart.currency.iso_code }}",
+    "price": "{{ product.price | money_without_currency | remove: '.' | remove: ',' }}",
+    "availability": "{% if product.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+    "url": "{{ store_url }}{{ product.url }}",
+    "seller": {
+      "@type": "Organization",
+      "name": "{{ store_name | escape }}"
+    }
+    {%- if product.metafields.judgeme.badge -%}
+      ,"aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "{{ product.metafields.judgeme.badge | split: "data-average-rating='" | last | split: "'" | first | default: '5' }}",
+        "reviewCount": "{{ product.metafields.judgeme.badge | split: "data-number-of-reviews='" | last | split: "'" | first | default: '1' }}"
+      }
+    {%- elsif product.metafields.loox.num_reviews -%}
+      ,"aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "{{ product.metafields.loox.avg_rating | default: '5' }}",
+        "reviewCount": "{{ product.metafields.loox.num_reviews | default: '1' }}"
+      }
+    {%- elsif product.metafields.spr.reviews -%}
+      {%- assign spr_count = product.metafields.spr.reviews | split: 'itemprop="reviewCount" content="' | last | split: '"' | first -%}
+      {%- assign spr_rate = product.metafields.spr.reviews | split: 'itemprop="ratingValue" content="' | last | split: '"' | first -%}
+      {%- if spr_count != blank -%}
+        ,"aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "{{ spr_rate | default: '5' }}",
+          "reviewCount": "{{ spr_count }}"
+        }
+      {%- endif -%}
+    {%- endif -%}
+  }
+}
+</script>
+
+{%- elsif request.page_type == 'collection' and collection -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "{{ collection.title | escape }} — {{ store_name | escape }}",
+  "description": "{{ collection.description | strip_html | truncatewords: 100 | default: store_description | escape }}",
+  "url": "{{ store_url }}{{ collection.url }}",
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "{{ store_url }}"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "{{ collection.title | escape }}",
+        "item": "{{ store_url }}{{ collection.url }}"
+      }
+    ]
+  }
+}
+</script>
+{%- endif -%}
+
+{%- comment %} ── 4.5. FAQ SCHEMA (GEO / AEO) ── {% endcomment %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Cuál es el tiempo de entrega en Colombia?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Los envíos a ciudades principales como Bogotá, Medellín y Cali tardan de 24 a 48 horas hábiles. Para el resto del país, el tiempo de entrega es de 3 a 5 días hábiles."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Tienen garantía los relojes Poedagar?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, todos nuestros relojes cuentan con una garantía oficial de 12 meses por defectos de maquinaria."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué métodos de pago aceptan?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Aceptamos PSE, tarjetas de crédito, transferencias bancarias y pago contra entrega en ciudades seleccionadas."
+      }
+    }
+  ]
+}
+</script>
+
+{%- comment %} ── 5. META DESCRIPTION FORZADA Si no existe ── {% endcomment %}
+{%- unless page_description -%}
+  {%- if request.page_type == 'index' -%}
+    <meta name="description" content="{{ store_description | escape }}">
+  {%- elsif request.page_type == 'product' and product -%}
+    <meta name="description" content="Compra {{ product.title | escape }} en Poedagar Colombia. {{ product.description | strip_html | truncatewords: 20 | escape }}. Envío a todo Colombia.">
+  {%- elsif request.page_type == 'collection' and collection -%}
+    <meta name="description" content="Explora nuestra colección {{ collection.title | escape }} en Poedagar Colombia. Relojes de calidad con garantía oficial. Envío a todo el país.">
+  {%- else -%}
+    <meta name="description" content="{{ store_description | escape }}">
+  {%- endif -%}
+{%- endunless -%}
+
+{%- comment %} ── 6. META ROBOTS & TAGS ADICIONALES ── {% endcomment %}
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="googlebot" content="index, follow">
+<meta name="rating" content="general">
+<meta name="revisit-after" content="7 days">
+<meta name="geo.region" content="CO">
+<meta name="geo.placename" content="Colombia">
+<meta name="language" content="es">
+<meta name="copyright" content="{{ store_name }}">
+
+{%- comment %} ── 7. OPEN GRAPH MEJORADO ── {% endcomment %}
+<meta property="og:locale" content="{{ store_locale }}">
+<meta property="og:locale:alternate" content="es_CO">
+{%- if request.page_type == 'index' -%}
+  <meta property="og:image" content="{{ settings.logo | default: '' | img_url: '1200x630' | prepend: 'https:' }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+{%- endif -%}

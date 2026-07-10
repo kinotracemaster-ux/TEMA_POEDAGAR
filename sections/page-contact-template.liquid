@@ -1,0 +1,270 @@
+<div class="container container--narrow contact-container">
+  <header class="page__header page__header--stack page__header--centered">
+    <h1 class="page__title heading h1">{{ page.title }}</h1>
+
+    <div class="page__description rte" style="text-align: left; max-width: 600px; margin: 0 auto; color: #444; font-size: 16px; line-height: 1.6;">
+      <p>¡Hola! Si tienes alguna duda, si deseas realizar una consulta, preguntar sobre nuestros productos o resolver cualquier inquietud, puedes hacerlo a través de nuestro WhatsApp desde aquí <strong><a href="https://wa.me/573146961737" style="color: var(--gold); text-decoration: underline;">+57 314 6961737</a></strong>.</p>
+      <p>Te responderemos lo más pronto posible. También puedes usar el formulario que encontrarás aquí abajo.</p>
+      <br>
+      <p><a href="#contact_form" style="text-decoration: underline;">¡Escríbenos para lo que necesites!</a></p>
+      <br>
+      <h4><strong>Horario de atención al cliente</strong></h4>
+      <p>Lunes a Sábado: de 8 am a 10 pm | Domingo y festivos: de 8 am a 12 pm</p>
+    </div>
+  </header>
+
+<style>
+/* Professional Contact Form Enhancements */
+.contact-container {
+  margin-bottom: 60px;
+}
+.form__input-wrapper.form__input-wrapper--labelled {
+  position: relative;
+  margin-bottom: 25px;
+}
+.form__field {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 16px 20px;
+  background: #fafafa;
+  transition: all 0.3s ease;
+  font-family: var(--text-font-family);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02) inset;
+}
+.form__field:focus {
+  border-color: var(--gold);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(207, 168, 92, 0.15);
+  outline: none;
+}
+.form__floating-label {
+  color: #777;
+  font-size: 14px;
+}
+.form__submit {
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  padding: 18px 40px;
+  background-color: var(--gold);
+  color: var(--dark);
+  border: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(207, 168, 92, 0.3);
+}
+.form__submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(207, 168, 92, 0.4);
+}
+</style>
+</div>
+
+<div class="container container--medium">
+  <div class="layout">
+    <div class="layout__section">
+      {%- form 'contact', class: 'form' -%}
+        {%- if section.settings.show_store_info -%}
+          <div class="form__header">
+            <h2 class="heading h3">{{ section.settings.form_heading | escape }}</h2>
+          </div>
+        {%- endif -%}
+
+        {%- if form.posted_successfully? -%}
+          <p class="alert alert--success">{{ 'contact.form.successfully_sent' | t }}</p>
+        {%- endif -%}
+
+        {%- if form.errors -%}
+          <div class="alert alert--error" id="contact-form-error">
+            <ul class="alert__error-list" role="list">
+              {%- for field in form.errors -%}
+                {%- if field == 'form' -%}
+                  <li class="alert__error-item">{{ form.errors.messages[field] }}</li>
+                {%- else -%}
+                  <li class="alert__error-item">{{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}</li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        <div class="form__input-row">
+          <div class="form__input-wrapper form__input-wrapper--labelled">
+            <input id="contact-form-name" type="text" class="form__field form__field--text {% if customer.name != blank %}is-filled{% endif %}" name="contact[name]" aria-label="{{ 'contact.form.name' | t }}" required {% if customer %}value="{{ customer.name }}"{% endif %}>
+            <label for="contact-form-name" class="form__floating-label">{{ 'contact.form.name' | t }}</label>
+          </div>
+
+          <div class="form__input-wrapper form__input-wrapper--labelled">
+            <input id="contact-form-email" type="email" class="form__field form__field--text {% if customer.email != blank %}is-filled{% endif %}" name="contact[email]" aria-label="{{ 'contact.form.email' | t }}" required {% if customer %}value="{{ customer.email }}"{% endif %} {% if form.errors contains 'email' %}aria-invalid="true" aria-describedby="contact-form-error"{% endif %}>
+            <label for="contact-form-email" class="form__floating-label">{{ 'contact.form.email' | t }}</label>
+          </div>
+        </div>
+
+        {%- for block in section.blocks -%}
+          {%- assign field_title = block.settings.title -%}
+
+          {%- if field_title == blank -%}
+            {%- capture field_title -%}Custom field {% increment custom_field %}{%- endcapture -%}
+          {%- endif -%}
+
+          {%- if block.type == 'text' -%}
+            <div class="form__input-wrapper form__input-wrapper--labelled">
+              {%- if block.settings.use_long_text -%}
+                <textarea id="contact-form-{{ field_title | handle }}" name="contact[{{ field_title | escape }}]" rows="7" class="form__field form__field--textarea" aria-label="{{ block.settings.title | escape }}" {% if block.settings.is_required %}required{% endif %}></textarea>
+                <label for="contact-form-{{ field_title | handle }}" class="form__floating-label">{{ block.settings.title | escape }}</label>
+              {%- else -%}
+                <input id="contact-form-{{ field_title | handle }}" type="text" class="form__field form__field--text" name="contact[{{ field_title | escape }}]" aria-label="{{ block.settings.title | escape }}" {% if block.settings.is_required %}required{% endif %}>
+                <label for="contact-form-{{ field_title | handle }}" class="form__floating-label">{{ block.settings.title | escape }}</label>
+              {%- endif -%}
+            </div>
+          {%- elsif block.type == 'dropdown' -%}
+            {%- assign values = block.settings.values | split: ',' -%}
+
+            {%- if values == empty -%}
+              {%- continue -%}
+            {%- endif -%}
+
+            <div class="form__input-wrapper form__input-wrapper--labelled">
+              <div id="contact-form-{{ field_title | handle }}" class="select-wrapper select-wrapper--primary">
+                {%- render 'icon', icon: 'arrow-bottom' -%}
+
+                <select name="contact[{{ field_title | escape }}]" title="{{ block.settings.title | escape }}" required>
+                  <option value="" disabled selected></option>
+
+                  {%- for value in values -%}
+                    {%- assign trim_value = value | strip -%}
+
+                    <option value="{{ trim_value | escape }}">{{ trim_value | escape }}</option>
+                  {%- endfor -%}
+                </select>
+              </div>
+
+              <label for="contact-form-{{ field_title | handle }}" class="form__floating-label">{{ block.settings.title | escape }}</label>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+
+        <div class="form__input-wrapper form__input-wrapper--labelled">
+          <textarea id="contact-form-message" name="contact[body]" rows="8" class="form__field form__field--textarea" aria-label="{{ 'contact.form.message' | t }}" required></textarea>
+          <label for="contact-form-message" class="form__floating-label">{{ 'contact.form.message' | t }}</label>
+        </div>
+
+        <button type="submit" class="form__submit {% unless section.settings.show_store_info %}form__submit--centered{% endunless %} button button--primary button--min-width">{{ 'contact.form.submit' | t }}</button>
+      {%- endform -%}
+    </div>
+
+    {%- if section.settings.show_store_info -%}
+      <div class="layout__section layout__section--large-secondary">
+        <div class="contact__store-info">
+          {%- if section.settings.store_heading != blank -%}
+            <h2 class="contact__store-heading heading h3">{{ section.settings.store_heading | escape }}</h2>
+          {%- endif -%}
+
+          {%- if section.settings.store_image -%}
+            <div class="contact__store-image">
+              <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: section.settings.store_image.aspect_ratio }}%">
+                <img src="{{ section.settings.store_image | img_url: '700x' }}" alt="{{ section.settings.store_image.alt | escape }}">
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.store_info != blank -%}
+            <div class="contact__store-text rte">
+              {{ section.settings.store_info }}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Contact page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Form"
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "label": "Heading",
+      "default": "Leave your message"
+    },
+    {
+      "type": "header",
+      "content": "Store info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_store_info",
+      "label": "Show store info",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "store_heading",
+      "label": "Heading",
+      "default": "Find us"
+    },
+    {
+      "type": "image_picker",
+      "id": "store_image",
+      "label": "Store image",
+      "info": "700 x 500px .jpg recommended"
+    },
+    {
+      "type": "richtext",
+      "id": "store_info",
+      "label": "Text"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Text field",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Name",
+          "default": "Custom field"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_long_text",
+          "label": "Use long text",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "is_required",
+          "label": "Field is required",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "name": "Dropdown",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Name",
+          "default": "Custom field"
+        },
+        {
+          "type": "text",
+          "id": "values",
+          "label": "Values",
+          "info": "Separate each value by a comma.",
+          "default": "value 1, value 2, value 3"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

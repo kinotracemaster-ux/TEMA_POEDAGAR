@@ -1,0 +1,195 @@
+
+    <div class="loox-v2-carousel-container"
+         id="LOOX-V2_CAROUSEL-{{ 'now' | date: "%09N" }}"
+         data-widget="carousel"
+         data-slide-type="gallery"
+         {% if section.settings.maxWidth %} data-max-width="{{ section.settings.maxWidth }}" {% endif %}
+{% if section.settings.borderRadius %} data-border-radius="{{ section.settings.borderRadius }}" {% endif %}
+{% if section.settings.itemsPerView %} data-items-per-view="{{ section.settings.itemsPerView }}" {% endif %}
+{% if section.settings.imageRatio %} data-image-ratio="{{ section.settings.imageRatio }}" {% endif %}
+{% if section.settings.reviewerNameColor %} data-reviewer-name-color="{{ section.settings.reviewerNameColor | replace: "#", "" }}" {% endif %}
+{% if section.settings.starsColor %} data-stars-color="{{ section.settings.starsColor | replace: "#", "" }}" {% endif %}
+{% if section.settings.arrows_backgroundColor %} data-arrows_background-color="{{ section.settings.arrows_backgroundColor | replace: "#", "" }}" {% endif %}
+{% if section.settings.arrows_iconColor %} data-arrows_icon-color="{{ section.settings.arrows_iconColor | replace: "#", "" }}" {% endif %}
+{% if section.settings.shadow %} data-shadow="{{ section.settings.shadow }}" {% endif %}
+{% if section.settings.border_active %} data-border_active="yes" {% else %} data-border_active="no" {% endif %}
+{% if section.settings.border_width %} data-border_width="{{ section.settings.border_width }}" {% endif %}
+{% if section.settings.border_color %} data-border_color="{{ section.settings.border_color | replace: "#", "" }}" {% endif %}
+{% if section.settings.productIds %} data-product-ids="{{ all_products[section.settings.productIds].id }}" {% endif %}
+
+         data-customer-locale="{{ request.locale.iso_code }}"
+         {% if request.design_mode %}
+         data-preview="yes"
+         data-loox-block-id="{{ section.id }}"
+         data-request-path="{{ request.path }}"
+         data-page-type="{{ request.page_type }}"
+         data-origin="{{ request.origin }}"
+         data-template="{{ template }}"
+         {% endif %}
+    >
+    </div>
+    
+    {% schema %}
+        {
+    "name": "Loox Carousel - Gallery",
+    "class": "loox-gallery-carousel-lqd-section",
+    "settings": [
+        {
+            "type": "paragraph",
+            "content": "Tenga en cuenta que este widget solo mostrará reseñas con foto"
+        },
+        {
+            "type": "range",
+            "id": "maxWidth",
+            "min": 600,
+            "max": 1600,
+            "step": 10,
+            "unit": "px",
+            "label": "Ancho máximo",
+            "default": 1100
+        },
+        {
+            "type": "range",
+            "id": "borderRadius",
+            "min": 0,
+            "max": 400,
+            "step": 4,
+            "unit": "px",
+            "label": "Radio de las esquinas",
+            "default": 60
+        },
+        {
+            "type": "range",
+            "id": "itemsPerView",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "label": "Número de reseñas en escritorio",
+            "default": 5
+        },
+        {
+            "type": "select",
+            "id": "imageRatio",
+            "label": "Relación de aspecto de la imagen",
+            "options": [
+                {
+                    "value": "1",
+                    "label": "1:1"
+                },
+                {
+                    "value": "0.72",
+                    "label": "3:4"
+                },
+                {
+                    "value": "1.25",
+                    "label": "4:3"
+                },
+                {
+                    "value": "0.5625",
+                    "label": "16:9"
+                }
+            ],
+            "default": "1"
+        },
+        {
+            "type": "color",
+            "id": "reviewerNameColor",
+            "label": "Color del nombre del autor",
+            "default": "#ffffff"
+        },
+        {
+            "type": "color",
+            "id": "starsColor",
+            "label": "Color de las estrellas",
+            "default": "#ffffff"
+        },
+        {
+            "type": "color",
+            "id": "arrows_backgroundColor",
+            "label": "Color de fondo de las flechas",
+            "default": "#FFFFFF"
+        },
+        {
+            "type": "color",
+            "id": "arrows_iconColor",
+            "label": "Color de las flechas",
+            "default": "#9A9A9A"
+        },
+        {
+            "type": "header",
+            "content": "Sombra y Borde"
+        },
+        {
+            "type": "select",
+            "id": "shadow",
+            "label": "Estilo de sombra paralela",
+            "options": [
+                {
+                    "value": "none",
+                    "label": "Sin sombra"
+                },
+                {
+                    "value": "basic",
+                    "label": "Básico"
+                },
+                {
+                    "value": "offset-dark",
+                    "label": "Desplazamiento oscuro"
+                },
+                {
+                    "value": "offset-light",
+                    "label": "Desplazamiento claro"
+                }
+            ],
+            "default": "none"
+        },
+        {
+            "type": "checkbox",
+            "id": "border_active",
+            "label": "Mostrar borde",
+            "default": false
+        },
+        {
+            "type": "range",
+            "id": "border_width",
+            "min": 1,
+            "max": 10,
+            "step": 1,
+            "unit": "px",
+            "label": "Ancho del borde",
+            "default": 2
+        },
+        {
+            "type": "color",
+            "id": "border_color",
+            "label": "Color del borde",
+            "default": "#000000"
+        },
+        {
+            "type": "header",
+            "content": "Selección de reseñas"
+        },
+        {
+            "type": "paragraph",
+            "content": "Aprenda a seleccionar qué reseñas mostrar en este widget [Saber más](https://help.loox.io/article/607-loox-carousel-widgets)."
+        },
+        {
+            "type": "product",
+            "id": "productIds",
+            "label": "Seleccionar producto (opcional)",
+            "info": "Si prefiere mostrar reseñas de un producto específico, selecciónelo aquí."
+        },
+        {
+            "type": "paragraph",
+            "content": "Personalice la fuente del carrusel en los ajustes de Loox [Ajustes de Branding de Loox](/admin/apps/loox-fashion-reviews/admin/settings/branding)"
+        }
+    ],
+    "presets": [
+        {
+            "name": "Loox Carousel - Gallery",
+            "category": "Loox"
+        }
+    ]
+}
+    {% endschema %}
+    

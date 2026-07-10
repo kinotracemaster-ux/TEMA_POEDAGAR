@@ -1,0 +1,113 @@
+{%- if section.settings.show_announcement -%}
+  <section data-section-id="{{ section.id }}" data-section-type="announcement-bar">
+
+    <style>
+      /* Marquesina fija arriba al hacer scroll */
+      #shopify-section-{{ section.id }} {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      .marquee-wrapper {
+        overflow: hidden;
+        white-space: nowrap;
+        display: flex;
+        width: 100%;
+      }
+      .marquee-1 {
+        background-color: #000000;
+        color: var(--gold, #cfa85c);
+        padding: 10px 0;
+        font-size: {{ section.settings.font_size_1 }}px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+      .marquee-track {
+        display: inline-flex;
+        animation: scroll-marquee-black {{ section.settings.speed_1 }}s linear infinite;
+      }
+      .marquee-item {
+        padding: 0 40px;
+      }
+      .static-text {
+        width: 100%;
+        padding: 0 20px;
+      }
+      .static-text--center { text-align: center; }
+      .static-text--left   { text-align: left; }
+      @keyframes scroll-marquee-black {
+        0%   { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+    </style>
+
+    <div class="marquee-wrapper marquee-1">
+      {%- if section.settings.text_position_1 == 'marquee' -%}
+        <div class="marquee-track">
+          {% for i in (1..8) %}
+          <div class="marquee-item">{{ section.settings.text_1 | escape }}</div>
+          {% endfor %}
+        </div>
+      {%- else -%}
+        <div class="static-text static-text--{{ section.settings.text_position_1 }}">{{ section.settings.text_1 | escape }}</div>
+      {%- endif -%}
+    </div>
+  </section>
+
+  <script>
+    document.documentElement.style.setProperty('--announcement-bar-height', document.getElementById('shopify-section-{{ section.id }}').clientHeight + 'px');
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Mostrar marquesina negra",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "text_1",
+      "label": "Texto",
+      "default": "POEDAGAR OFICIAL COLOMBIA - EL TIEMPO ESTÁ POR CAMBIAR"
+    },
+    {
+      "type": "range",
+      "id": "font_size_1",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamano de texto",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "speed_1",
+      "min": 5,
+      "max": 350,
+      "step": 5,
+      "unit": "s",
+      "label": "Velocidad (seg) — menor = rapido | mayor = casi parada",
+      "default": 140
+    },
+    {
+      "type": "select",
+      "id": "text_position_1",
+      "label": "Estilo",
+      "options": [
+        { "value": "marquee", "label": "Movimiento continuo" },
+        { "value": "center", "label": "Fijo centrado" },
+        { "value": "left",   "label": "Fijo izquierda" }
+      ],
+      "default": "marquee"
+    }
+  ]
+}
+{% endschema %}

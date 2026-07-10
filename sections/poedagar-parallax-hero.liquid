@@ -1,0 +1,314 @@
+{% comment %} ================================================
+  POEDAGAR — PARALLAX HERO
+  100% configurable desde Admin → Personalizar
+================================================ {% endcomment %}
+
+{%- assign s = section.settings -%}
+{%- assign sid = section.id -%}
+
+<section
+  id="poedagar-hero-{{ sid }}"
+  class="poedagar-ph{% if s.full_height %} poedagar-ph--fullvh{% endif %}"
+  aria-label="{{ s.title | escape }}"
+>
+  {%- if s.image -%}
+    <div class="poedagar-ph__bg" id="poedagar-ph-bg-{{ sid }}"
+      style="background-image:url('{{ s.image | img_url: '1800x' }}');"></div>
+  {%- else -%}
+    <div class="poedagar-ph__bg poedagar-ph__bg--placeholder" id="poedagar-ph-bg-{{ sid }}"></div>
+  {%- endif -%}
+
+  {%- if s.show_overlay -%}
+    <div class="poedagar-ph__overlay"
+      style="background-color:{{ s.overlay_color }}; opacity:{{ s.overlay_opacity | divided_by: 100.0 }};"></div>
+  {%- endif -%}
+
+  <div class="poedagar-ph__content poedagar-ph__content--{{ s.text_align }}">
+    {%- if s.eyebrow != blank -%}
+      <p class="poedagar-ph__eyebrow" style="color:{{ s.eyebrow_color }}; font-size:{{ s.eyebrow_size }}px;">
+        {{ s.eyebrow }}
+      </p>
+    {%- endif -%}
+
+    {%- if s.title != blank -%}
+      <h1 class="poedagar-ph__title" style="color:{{ s.text_color }}; font-size:clamp(2rem,{{ s.title_size }}vw,{{ s.title_size | times: 12 }}px);">
+        {{ s.title }}
+      </h1>
+    {%- endif -%}
+
+    {%- if s.subtitle != blank -%}
+      <p class="poedagar-ph__subtitle" style="color:{{ s.subtitle_color }}; font-size:{{ s.subtitle_size }}px;">
+        {{ s.subtitle }}
+      </p>
+    {%- endif -%}
+
+    <div class="poedagar-ph__ctas">
+      {%- if s.cta_text != blank and s.cta_link != blank -%}
+        <a href="{{ s.cta_link }}"
+          class="poedagar-ph__cta"
+          style="background-color:{{ s.btn_bg }};color:{{ s.btn_text }};border-color:{{ s.btn_bg }};">
+          {{ s.cta_text }}
+        </a>
+      {%- endif -%}
+      {%- if s.cta2_text != blank and s.cta2_link != blank -%}
+        <a href="{{ s.cta2_link }}"
+          class="poedagar-ph__cta poedagar-ph__cta--ghost"
+          style="color:{{ s.text_color }};border-color:{{ s.text_color }};">
+          {{ s.cta2_text }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if s.show_scroll -%}
+    <div class="poedagar-ph__scroll" style="color:{{ s.text_color }};"><span></span></div>
+  {%- endif -%}
+</section>
+
+<style>
+#poedagar-hero-{{ sid }} {
+  position: relative;
+  min-height: {{ s.min_height }}px;
+  display: flex;
+  align-items: {{ s.vertical_align }};
+  overflow: hidden;
+  padding: {{ s.padding_v }}px 24px;
+}
+#poedagar-hero-{{ sid }}.poedagar-ph--fullvh { min-height: 100vh; }
+
+#poedagar-hero-{{ sid }} .poedagar-ph__bg {
+  position: absolute;
+  inset: -15% 0;
+  background-size: cover;
+  background-position: {{ s.image_position }};
+  background-repeat: no-repeat;
+  will-change: transform;
+}
+#poedagar-hero-{{ sid }} .poedagar-ph__bg--placeholder {
+  background-color: {{ s.placeholder_color }};
+}
+#poedagar-hero-{{ sid }} .poedagar-ph__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+#poedagar-hero-{{ sid }} .poedagar-ph__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: {{ s.content_max_width }}px;
+  {% if s.text_align == 'center' %}margin: 0 auto;{% elsif s.text_align == 'right' %}margin-left: auto;{% endif %}
+}
+#poedagar-hero-{{ sid }} .poedagar-ph__content--center { text-align: center; }
+#poedagar-hero-{{ sid }} .poedagar-ph__content--right  { text-align: right; }
+#poedagar-hero-{{ sid }} .poedagar-ph__content--left   { text-align: left; }
+
+#poedagar-hero-{{ sid }} .poedagar-ph__eyebrow {
+  font-family: {{ s.eyebrow_font_family }};
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 0 0 {{ s.eyebrow_gap }}px;
+}
+#poedagar-hero-{{ sid }} .poedagar-ph__title {
+  font-family: {{ s.title_font_family }};
+  font-weight: 700;
+  line-height: {{ s.title_line_height | divided_by: 10.0 }};
+  margin: 0 0 24px;
+  letter-spacing: -0.01em;
+}
+#poedagar-hero-{{ sid }} .poedagar-ph__subtitle {
+  font-family: {{ s.text_font_family }};
+  line-height: 1.65;
+  font-weight: 300;
+  max-width: 560px;
+  margin: 0 0 36px;
+  {% if s.text_align == 'center' %}margin-left: auto; margin-right: auto;{% endif %}
+}
+#poedagar-hero-{{ sid }} .poedagar-ph__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  {% if s.text_align == 'center' %}justify-content: center;{% elsif s.text_align == 'right' %}justify-content: flex-end;{% endif %}
+}
+#poedagar-hero-{{ sid }} .poedagar-ph__cta {
+  display: inline-flex;
+  align-items: center;
+  padding: {{ s.btn_padding_v }}px {{ s.btn_padding_h }}px;
+  font-family: {{ s.text_font_family }};
+  font-size: {{ s.btn_font_size }}px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1.5px solid;
+  border-radius: {{ s.btn_radius }}px;
+  transition: all 0.3s ease;
+}
+#poedagar-hero-{{ sid }} .poedagar-ph__cta:hover {
+  background-color: transparent !important;
+  color: {{ s.btn_bg }} !important;
+}
+#poedagar-hero-{{ sid }} .poedagar-ph__cta--ghost {
+  background-color: transparent !important;
+}
+#poedagar-hero-{{ sid }} .poedagar-ph__cta--ghost:hover {
+  background-color: rgba(255,255,255,0.12) !important;
+}
+
+/* Scroll indicator */
+#poedagar-hero-{{ sid }} .poedagar-ph__scroll {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+#poedagar-hero-{{ sid }} .poedagar-ph__scroll span {
+  display: block;
+  width: 22px;
+  height: 36px;
+  border: 2px solid currentColor;
+  border-radius: 12px;
+  position: relative;
+}
+#poedagar-hero-{{ sid }} .poedagar-ph__scroll span::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 8px;
+  background: currentColor;
+  border-radius: 2px;
+  animation: poedagar-scroll-{{ sid }} 1.6s ease-in-out infinite;
+}
+@keyframes poedagar-scroll-{{ sid }} {
+  0%   { opacity:1; transform: translateX(-50%) translateY(0); }
+  100% { opacity:0; transform: translateX(-50%) translateY(12px); }
+}
+@media (max-width: 768px) {
+  #poedagar-hero-{{ sid }} .poedagar-ph__content {
+    text-align: center;
+    max-width: 100%;
+  }
+  #poedagar-hero-{{ sid }} .poedagar-ph__subtitle,
+  #poedagar-hero-{{ sid }} .poedagar-ph__ctas {
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+  }
+  {%- if s.image_mobile -%}
+  #poedagar-hero-{{ sid }} .poedagar-ph__bg {
+    background-image: url('{{ s.image_mobile | img_url: "1000x" }}') !important;
+    background-position: center center;
+  }
+  {%- endif -%}
+}
+</style>
+
+<script>
+(function() {
+  var hero = document.getElementById('poedagar-hero-{{ sid }}');
+  if (!hero) return;
+  var bg = document.getElementById('poedagar-ph-bg-{{ sid }}');
+  if (!bg) return;
+  var intensity = {{ s.parallax_intensity | times: 0.08 }};
+  var ticking = false;
+  function update() {
+    var r = hero.getBoundingClientRect();
+    var vh = window.innerHeight;
+    if (r.bottom < 0 || r.top > vh) return;
+    var p = (vh - r.top) / (vh + r.height);
+    bg.style.transform = 'translateY(' + ((p - 0.5) * intensity * 100) + 'px)';
+  }
+  window.addEventListener('scroll', function() {
+    if (!ticking) { requestAnimationFrame(function() { update(); ticking = false; }); ticking = true; }
+  }, { passive: true });
+  update();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Poedagar — Parallax Hero",
+  "settings": [
+    { "type": "header", "content": "🖼️ Imagen de fondo" },
+    { "type": "image_picker", "id": "image", "label": "Imagen desktop (recomendado 1920×1080px)" },
+    { "type": "image_picker", "id": "image_mobile", "label": "Imagen móvil (recomendado 800×1000px — opcional)" },
+    { "type": "select", "id": "image_position", "label": "Posición de la imagen", "default": "center center",
+      "options": [
+        { "value": "center top",    "label": "Arriba" },
+        { "value": "center center", "label": "Centro" },
+        { "value": "center bottom", "label": "Abajo" },
+        { "value": "left center",   "label": "Izquierda" },
+        { "value": "right center",  "label": "Derecha" }
+      ]
+    },
+    { "type": "color", "id": "placeholder_color", "label": "Color si no hay imagen", "default": "#1a1a1a" },
+    { "type": "header", "content": "📐 Tamaño del hero" },
+    { "type": "checkbox", "id": "full_height", "label": "Pantalla completa (100vh)", "default": true },
+    { "type": "range", "id": "min_height", "label": "Altura mínima (px)", "min": 300, "max": 900, "step": 50, "default": 600 },
+    { "type": "range", "id": "padding_v", "label": "Padding vertical (px)", "min": 0, "max": 200, "step": 10, "default": 80 },
+    { "type": "select", "id": "vertical_align", "label": "Alineación vertical del contenido", "default": "center",
+      "options": [
+        { "value": "flex-start", "label": "Arriba" },
+        { "value": "center",     "label": "Centro" },
+        { "value": "flex-end",   "label": "Abajo" }
+      ]
+    },
+    { "type": "range", "id": "parallax_intensity", "label": "Intensidad parallax (0=ninguno, 10=máximo)", "min": 0, "max": 10, "step": 1, "default": 3 },
+    { "type": "header", "content": "🌑 Overlay" },
+    { "type": "checkbox", "id": "show_overlay", "label": "Activar capa oscura sobre imagen", "default": true },
+    { "type": "color", "id": "overlay_color", "label": "Color del overlay", "default": "#000000" },
+    { "type": "range", "id": "overlay_opacity", "label": "Opacidad (%)", "min": 0, "max": 90, "step": 5, "default": 45 },
+    { "type": "header", "content": "✍️ Contenido — Posición" },
+    { "type": "select", "id": "text_align", "label": "Alineación", "default": "left",
+      "options": [
+        { "value": "left",   "label": "Izquierda" },
+        { "value": "center", "label": "Centro" },
+        { "value": "right",  "label": "Derecha" }
+      ]
+    },
+    { "type": "range", "id": "content_max_width", "label": "Ancho máximo del contenido (px)", "min": 400, "max": 1200, "step": 50, "default": 750 },
+    { "type": "header", "content": "✍️ Eyebrow (texto pequeño sobre el título)" },
+    { "type": "text", "id": "eyebrow", "label": "Texto eyebrow", "default": "Colección 2025" },
+    { "type": "color", "id": "eyebrow_color", "label": "Color eyebrow", "default": "#cfa85c" },
+    { "type": "range", "id": "eyebrow_size", "label": "Tamaño fuente eyebrow (px)", "min": 10, "max": 20, "step": 1, "default": 13 },
+    { "type": "range", "id": "eyebrow_gap", "label": "Espacio debajo eyebrow (px)", "min": 8, "max": 40, "step": 2, "default": 20 },
+    { "type": "text", "id": "eyebrow_font_family", "label": "Fuente eyebrow", "default": "'Inter', sans-serif" },
+    { "type": "header", "content": "🔠 Título" },
+    { "type": "textarea", "id": "title", "label": "Título principal", "default": "El Tiempo,\nRedefinido." },
+    { "type": "color", "id": "text_color", "label": "Color título y texto", "default": "#ffffff" },
+    { "type": "range", "id": "title_size", "label": "Tamaño título (vw — se adapta a pantalla)", "min": 2, "max": 10, "step": 1, "default": 5 },
+    { "type": "range", "id": "title_line_height", "label": "Interlineado título (ej. 11 = 1.1)", "min": 10, "max": 15, "step": 1, "default": 11 },
+    { "type": "text", "id": "title_font_family", "label": "Fuente título", "default": "'Playfair Display', serif" },
+    { "type": "header", "content": "💬 Subtítulo" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtítulo", "default": "Cada reloj Poedagar es una obra de ingeniería y estilo." },
+    { "type": "color", "id": "subtitle_color", "label": "Color subtítulo", "default": "#e8e8e8" },
+    { "type": "range", "id": "subtitle_size", "label": "Tamaño fuente subtítulo (px)", "min": 12, "max": 24, "step": 1, "default": 18 },
+    { "type": "text", "id": "text_font_family", "label": "Fuente texto / botón", "default": "'Inter', sans-serif" },
+    { "type": "header", "content": "🔶 Botón 1 (primario)" },
+    { "type": "text", "id": "cta_text", "label": "Texto botón 1", "default": "Explorar Colección" },
+    { "type": "url",  "id": "cta_link",  "label": "Enlace botón 1" },
+    { "type": "color", "id": "btn_bg",   "label": "Fondo botón 1", "default": "#cfa85c" },
+    { "type": "color", "id": "btn_text", "label": "Texto botón 1", "default": "#1a1a1a" },
+    { "type": "range", "id": "btn_font_size", "label": "Tamaño fuente botón (px)", "min": 11, "max": 18, "step": 1, "default": 13 },
+    { "type": "range", "id": "btn_padding_v", "label": "Padding vertical botón (px)", "min": 8, "max": 28, "step": 2, "default": 14 },
+    { "type": "range", "id": "btn_padding_h", "label": "Padding horizontal botón (px)", "min": 16, "max": 60, "step": 4, "default": 36 },
+    { "type": "range", "id": "btn_radius", "label": "Radio bordes botón (px)", "min": 0, "max": 40, "step": 2, "default": 2 },
+    { "type": "header", "content": "⬜ Botón 2 (ghost/secundario)" },
+    { "type": "text", "id": "cta2_text", "label": "Texto botón 2 (deja vacío para ocultar)" },
+    { "type": "url",  "id": "cta2_link", "label": "Enlace botón 2" },
+    { "type": "header", "content": "⚙️ Extras" },
+    { "type": "checkbox", "id": "show_scroll", "label": "Mostrar indicador de scroll", "default": true }
+  ],
+  "presets": [
+    {
+      "name": "Poedagar — Parallax Hero",
+      "category": "Poedagar"
+    }
+  ]
+}
+{% endschema %}

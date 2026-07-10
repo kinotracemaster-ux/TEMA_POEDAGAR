@@ -1,0 +1,663 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "KINORED",
+    "theme_author": "KINO",
+    "theme_version": "2.0",
+    "theme_documentation_url": "http://support.maestrooo.com/",
+    "theme_support_url": "https://support.maestrooo.com/article/203-contact-us"
+  },
+  {
+    "name": "Colores",
+    "settings": [
+      {
+        "type": "header",
+        "content": "General"
+      },
+      {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Encabezado",
+        "default": "#1c1b1b"
+      },
+      {
+        "type": "color",
+        "id": "textstrong",
+        "label": "Color de texto (fuerte)",
+        "default": "#1c1b1b"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Texto del cuerpo",
+        "default": "#677279"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "label": "Acento",
+        "default": "#00badb"
+      },
+      {
+        "type": "color",
+        "id": "link_color",
+        "label": "Color de enlace",
+        "default": "#838383"
+      },
+      {
+        "type": "color",
+        "id": "border_color",
+        "label": "Borde",
+        "default": "#e1e3e4"
+      },
+      {
+        "type": "color",
+        "id": "background",
+        "label": "Fondo",
+        "default": "#f3f5f6"
+      },
+      {
+        "type": "color",
+        "id": "secondary_background",
+        "label": "Fondo secundario",
+        "info": "For best results, secondary background must not be too far from primary background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "cor_secondary_background",
+        "label": "Color texto menú",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "cor_fundo_background",
+        "label": "Color fondo menú",
+        "default": "#000"
+      },
+      {
+        "type": "color",
+        "id": "error_color",
+        "label": "Mensajes de error",
+        "default": "#ff0000"
+      },
+      {
+        "type": "color",
+        "id": "success_color",
+        "label": "Mensajes de éxito",
+        "default": "#00aa00"
+      },
+      {
+        "type": "header",
+        "content": "Botón primario"
+      },
+      {
+        "type": "color",
+        "id": "primary_button_background",
+        "label": "Fondo",
+        "default": "#00badb"
+      },
+      {
+        "type": "color",
+        "id": "primary_button_text_color",
+        "label": "Texto",
+        "default": "#ffffff"
+      },
+      {
+        "type": "header",
+        "content": "Botón secundario"
+      },
+      {
+        "type": "color",
+        "id": "secondary_button_background",
+        "label": "Fondo",
+        "default": "#1e2d7d"
+      },
+      {
+        "type": "color",
+        "id": "secondary_button_text_color",
+        "label": "Texto",
+        "default": "#ffffff"
+      },
+      {
+        "type": "header",
+        "content": "Cabecera"
+      },
+      {
+        "type": "color",
+        "id": "header_background",
+        "label": "Fondo",
+        "default": "#1e2d7d"
+      },
+      {
+        "type": "color",
+        "id": "header_text_color",
+        "label": "Texto",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "header_light_text_color",
+        "label": "Texto claro",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "header_accent_color",
+        "label": "Acento",
+        "default": "#00badb"
+      },
+      {
+        "type": "header",
+        "content": "Pie de página"
+      },
+      {
+        "type": "color",
+        "id": "footer_background_color",
+        "label": "Fondo",
+        "default": "#f3f5f6"
+      },
+      {
+        "type": "color",
+        "id": "footer_heading_text_color",
+        "label": "Texto de encabezados",
+        "default": "#1e2d7d"
+      },
+      {
+        "type": "color",
+        "id": "footer_body_text_color",
+        "label": "Texto del cuerpo",
+        "default": "#677279"
+      },
+      {
+        "type": "color",
+        "id": "footer_accent_color",
+        "label": "Acento",
+        "default": "#00badb"
+      },
+      {
+        "type": "header",
+        "content": "Producto"
+      },
+      {
+        "type": "color",
+        "id": "product_on_sale_accent",
+        "label": "Acento en oferta",
+        "default": "#ee0000"
+      },
+      {
+        "type": "color",
+        "id": "product_in_stock_color",
+        "label": "En stock",
+        "default": "#00a500"
+      },
+      {
+        "type": "color",
+        "id": "product_low_stock_color",
+        "label": "Stock bajo",
+        "default": "#ee0000"
+      },
+      {
+        "type": "color",
+        "id": "product_sold_out_color",
+        "label": "Agotado",
+        "default": "#8a9297"
+      },
+      {
+        "type": "color",
+        "id": "product_label_1_background",
+        "label": "Fondo etiqueta personalizada 1",
+        "default": "#0774d7"
+      },
+      {
+        "type": "color",
+        "id": "product_label_2_background",
+        "label": "Fondo etiqueta personalizada 2",
+        "default": "#00a500"
+      },
+      {
+        "type": "color",
+        "id": "product_star_color",
+        "label": "Estrella de reseña",
+        "default": "#ffbd00"
+      },
+      {
+        "type": "color",
+        "id": "extras",
+        "label": "Envío, devolución y garantía",
+        "default": "#000"
+      },
+      {
+        "type": "color",
+        "id": "lancamento",
+        "label": "Fondo de lanzamiento",
+        "default": "#000"
+      },
+      {
+        "type": "color",
+        "id": "lancamentotexto",
+        "label": "Texto de lanzamiento",
+        "default": "#000"
+      },
+      {
+        "type": "color",
+        "id": "porcento",
+        "label": "Fondo porcentaje precio",
+        "default": "#000"
+      },
+      {
+        "type": "checkbox",
+        "id": "faixa",
+        "label": "Activar franja de menú"
+      },
+      {
+        "type": "color",
+        "id": "line1",
+        "label": "Color 1 de franja",
+        "default": "#000"
+      },
+      {
+        "type": "color",
+        "id": "line2",
+        "label": "Fondo 2 línea menú",
+        "default": "#000"
+      },
+      {
+        "type": "color",
+        "id": "line3",
+        "label": "Fondo 3 línea menú",
+        "default": "#000"
+      },
+      {
+        "type": "color",
+        "id": "line4",
+        "label": "Fondo 4 línea menú",
+        "default": "#000"
+      },
+      {
+        "type": "color",
+        "id": "line5",
+        "label": "Fondo 5 línea menú",
+        "default": "#000"
+      }
+    ]
+  },
+  {
+    "name": "Tipografía",
+    "settings": [
+      {
+        "type": "range",
+        "id": "base_text_font_size",
+        "label": "Tamaño base",
+        "info": "Todos los textos, incluidos encabezados, se ajustarán.",
+        "min": 14,
+        "max": 17,
+        "unit": "px",
+        "default": 15
+      },
+      {
+        "type": "header",
+        "content": "Encabezados"
+      },
+      {
+        "type": "font_picker",
+        "id": "heading_font",
+        "label": "Fuente",
+        "default": "helvetica_n4"
+      },
+      {
+        "type": "header",
+        "content": "Body text"
+      },
+      {
+        "type": "font_picker",
+        "id": "text_font",
+        "label": "Fuente",
+        "default": "helvetica_n4"
+      },
+      {
+        "type": "checkbox",
+        "id": "underline_links",
+        "label": "Subrayar enlaces",
+        "info": "Solo aplica a campos de texto enriquecido.",
+        "default": false
+      }
+    ]
+  },
+  {
+    "name": "Animación",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "animation_image_zoom",
+        "label": "Activar zoom al pasar el mouse",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Búsqueda",
+    "settings": [
+      {
+        "type": "select",
+        "id": "search_mode",
+        "label": "Buscar solo en...",
+        "options": [
+          {
+            "value": "product",
+            "label": "Solo productos"
+          },
+          {
+            "value": "product,page",
+            "label": "Productos y páginas"
+          },
+          {
+            "value": "product,article",
+            "label": "Productos y artículos"
+          },
+          {
+            "value": "product,article,page",
+            "label": "Productos, artículos y páginas"
+          }
+        ],
+        "default": "product,article"
+      }
+    ]
+  },
+  {
+    "name": "Cuadrícula de productos",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_vendor",
+        "label": "Mostrar proveedor",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_secondary_image",
+        "label": "Mostrar imagen secundaria al pasar el cursor",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_discount",
+        "label": "Mostrar etiqueta de descuento",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "discount_mode",
+        "label": "Mostrar descuento como...",
+        "options": [
+          {
+            "value": "percentage",
+            "label": "Porcentaje"
+          },
+          {
+            "value": "saving",
+            "label": "Ahorro"
+          }
+        ],
+        "default": "saving"
+      },
+      {
+        "type": "select",
+        "id": "product_price_position",
+        "label": "Posición del precio",
+        "options": [
+          {
+            "value": "before_title",
+            "label": "Antes del título"
+          },
+          {
+            "value": "after_title",
+            "label": "Después del título"
+          }
+        ],
+        "default": "after_title"
+      },
+      {
+        "type": "select",
+        "id": "product_image_size",
+        "label": "Tamaño de imagen del producto",
+        "options": [
+          {
+            "value": "natural",
+            "label": "Natural"
+          },
+          {
+            "value": "short",
+            "label": "Corto (4:3)"
+          },
+          {
+            "value": "square",
+            "label": "Cuadrado (1:1)"
+          },
+          {
+            "value": "tall",
+            "label": "Alto (2:3)"
+          }
+        ],
+        "default": "natural"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_color_swatch",
+        "label": "Mostrar muestra de color",
+        "info": "¿Los colores aparecen blancos? Aprende más en la documentación",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_inventory_quantity",
+        "label": "Mostrar inventario",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "low_inventory_threshold",
+        "label": "Umbral de inventario bajo",
+        "info": "Muestra la cantidad en rojo cuando esté por debajo del umbral. Pon 0 para mostrar siempre en stock.",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "default": 0
+      },
+      {
+        "type": "checkbox",
+        "id": "show_reviews_badge",
+        "label": "Mostrar insignia de reseñas",
+        "info": "Requiere una app de reseñas compatible.",
+        "default": false
+      }
+    ]
+  },
+  {
+    "name": "Carrito",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Tipo de carrito",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Cajón lateral (Drawer)"
+          },
+          {
+            "value": "message",
+            "label": "Mensaje"
+          },
+          {
+            "value": "page",
+            "label": "Página"
+          }
+        ],
+        "default": "drawer"
+      },
+      {
+        "type": "url",
+        "id": "cart_empty_button_link",
+        "label": "Enlace para carrito vacío",
+        "default": "/collections/all"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_checkout_button",
+        "label": "Mostrar botón de pago en cajón",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_free_shipping_threshold",
+        "label": "Mostrar monto mínimo de envío gratis",
+        "info": "Asegúrate de configurar las tarifas de envío primero.",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "cart_free_shipping_threshold",
+        "label": "Monto mínimo para envío gratis",
+        "info": "Escribe solo números, sin letras.",
+        "default": "50"
+      }
+    ]
+  },
+  {
+    "name": "Redes sociales",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Accounts"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook",
+        "info": "https://www.facebook.com/shopify",
+        "label": "Facebook"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter",
+        "info": "https://twitter.com/shopify",
+        "label": "Twitter"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest",
+        "info": "https://www.pinterest.com/shopify",
+        "label": "Pinterest"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "info": "https://instagram.com/shopify",
+        "label": "Instagram"
+      },
+      {
+        "type": "text",
+        "id": "social_vimeo",
+        "info": "https://vimeo.com/shopify",
+        "label": "Vimeo"
+      },
+      {
+        "type": "text",
+        "id": "social_tumblr",
+        "info": "https://shopify.tumblr.com",
+        "label": "Tumblr"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube",
+        "info": "https://www.youtube.com/user/shopify",
+        "label": "YouTube"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok",
+        "info": "https://www.tiktok.com/shopify",
+        "label": "TikTok"
+      },
+      {
+        "type": "text",
+        "id": "social_linkedin",
+        "info": "https://linkedin.com/in/shopify",
+        "label": "LinkedIn"
+      },
+      {
+        "type": "text",
+        "id": "social_snapchat",
+        "info": "https://snapchat.com/add/shopify",
+        "label": "Snapchat"
+      },
+      {
+        "type": "text",
+        "id": "social_fancy",
+        "info": "https://fancy.com/Shopify",
+        "label": "Fancy"
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Image",
+        "info": "96 x 96px .png recommended"
+      }
+    ]
+  },
+  {
+    "name": "Interés/Cuotas",
+    "settings": [
+      {
+        "type": "text",
+        "id": "juros",
+        "label": "Porcentagem",
+        "info": "Porcentagem sem , e % Ex. 21,61%",
+        "default": "2161"
+      }
+    ]
+  },
+  {
+    "name": "Integraciones Colombia",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Compra por WhatsApp"
+      },
+      {
+        "type": "text",
+        "id": "whatsapp_number",
+        "label": "Número de WhatsApp",
+        "info": "Incluye el código de país (ejemplo: 573146961737)",
+        "default": "573146961737"
+      },
+      {
+        "type": "checkbox",
+        "id": "whatsapp_enable",
+        "label": "Habilitar Botón de WhatsApp",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Insignias de Confianza (Logística)"
+      },
+      {
+        "type": "checkbox",
+        "id": "trust_badges_enable",
+        "label": "Mostrar de Contra Entrega en Producto",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "cart_logistics_text",
+        "label": "Texto logístico en Mini-Carrito",
+        "default": "📦 Tiempos de entrega est. 2 a 5 días. Pago Contra Entrega ✅"
+      }
+    ]
+  }
+]

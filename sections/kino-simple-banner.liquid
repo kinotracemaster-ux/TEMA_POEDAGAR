@@ -1,0 +1,106 @@
+<section class="kino-simple-banner section-{{ section.id }}" data-section-id="{{ section.id }}">
+  {%- style -%}
+    .section-{{ section.id }} .kino-simple-banner__container {
+      width: 100%;
+      {% if section.settings.full_width %}
+        max-width: 100%;
+        padding: 0;
+      {% else %}
+        max-width: var(--container-max-width);
+        margin: 0 auto;
+        padding: 0 20px;
+      {% endif %}
+    }
+
+    .kino-simple-banner__wrapper {
+      position: relative;
+      overflow: hidden;
+      display: block;
+      line-height: 0; /* Remove gap under image */
+    }
+
+    .kino-simple-banner__image {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: opacity 0.4s ease-in-out;
+    }
+
+    .kino-simple-banner__image--mobile {
+      display: none;
+    }
+
+    @media screen and (max-width: 768px) {
+      {% if section.settings.image_mobile != blank %}
+        .kino-simple-banner__image--desktop {
+          display: none;
+        }
+        .kino-simple-banner__image--mobile {
+          display: block;
+        }
+      {% endif %}
+    }
+
+    .kino-simple-banner__wrapper[href]:hover .kino-simple-banner__image {
+      opacity: 0.92;
+    }
+  {%- endstyle -%}
+
+  <div class="kino-simple-banner__container">
+    <{% if section.settings.link != blank %}a href="{{ section.settings.link }}"{% else %}div{% endif %} class="kino-simple-banner__wrapper">
+      {%- if section.settings.image_desktop != blank -%}
+        <img class="kino-simple-banner__image kino-simple-banner__image--desktop" 
+             src="{{ section.settings.image_desktop | img_url: '1800x' }}" 
+             alt="{{ section.settings.image_desktop.alt | escape }}"
+             loading="lazy">
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+
+      {%- if section.settings.image_mobile != blank -%}
+        <img class="kino-simple-banner__image kino-simple-banner__image--mobile" 
+             src="{{ section.settings.image_mobile | img_url: '800x' }}" 
+             alt="{{ section.settings.image_mobile.alt | escape }}"
+             loading="lazy">
+      {%- endif -%}
+    </{% if section.settings.link != blank %}a{% else %}div{% endif %}>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Kino Simple Banner",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Ancho completo",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Imagen Desktop",
+      "info": "Recomendado: 1800 x 600px"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Imagen Móvil",
+      "info": "Recomendado: 800 x 1000px"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Enlace (Opcional)",
+      "info": "Hace que todo el banner sea cliqueable"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kino Simple Banner",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}

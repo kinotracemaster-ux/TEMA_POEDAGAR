@@ -1,0 +1,321 @@
+{% comment %} ================================================
+  POEDAGAR — CATEGORÍAS DESTACADAS
+  Sección de tarjetas / cuadrícula para mostrar colecciones.
+================================================ {% endcomment %}
+
+{%- assign s = section.settings -%}
+{%- assign sid = section.id -%}
+
+<section id="poedagar-cat-{{ sid }}" class="poedagar-cat" style="background-color:{{ s.bg_color }};">
+  <div class="poedagar-cat__container" style="max-width: {{ s.max_width }}px;">
+    
+    <div class="poedagar-cat__header" style="text-align: {{ s.text_align }};">
+      {%- if s.eyebrow != blank -%}
+        <p class="poedagar-cat__eyebrow" style="color:{{ s.eyebrow_color }};">{{ s.eyebrow }}</p>
+      {%- endif -%}
+      {%- if s.title != blank -%}
+        <h2 class="poedagar-cat__title" style="color:{{ s.text_color }};">{{ s.title }}</h2>
+      {%- endif -%}
+      {%- if s.subtitle != blank -%}
+        <p class="poedagar-cat__subtitle" style="color:{{ s.text_color }}; opacity: 0.7;">{{ s.subtitle }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="poedagar-cat__grid" style="grid-template-columns: repeat({{ s.columns_desktop }}, 1fr);">
+      {%- for block in section.blocks -%}
+        {%- assign col = collections[block.settings.collection] -%}
+
+        {%- comment %} Imagen: personalizada > imagen de la colección > primer producto {%- endcomment %}
+        {%- if block.settings.image != blank -%}
+          {%- assign bg_image = block.settings.image -%}
+        {%- elsif col.image -%}
+          {%- assign bg_image = col.image -%}
+        {%- elsif col.products.first.featured_image -%}
+          {%- assign bg_image = col.products.first.featured_image -%}
+        {%- else -%}
+          {%- assign bg_image = nil -%}
+        {%- endif -%}
+
+        {%- comment %} Título: personalizado > nombre de la colección {%- endcomment %}
+        {%- if block.settings.label != blank -%}
+          {%- assign cat_title = block.settings.label -%}
+        {%- elsif col.title -%}
+          {%- assign cat_title = col.title -%}
+        {%- else -%}
+          {%- assign cat_title = "Colección" -%}
+        {%- endif -%}
+
+        {%- comment %} Enlace: URL manual > URL de la colección {%- endcomment %}
+        {%- if block.settings.url != blank -%}
+          {%- assign cat_link = block.settings.url -%}
+        {%- elsif col.url -%}
+          {%- assign cat_link = col.url -%}
+        {%- else -%}
+          {%- assign cat_link = "#" -%}
+        {%- endif -%}
+
+        {%- comment %} Texto del botón CTA {%- endcomment %}
+        {%- assign cat_cta = block.settings.cta | default: "Explorar" -%}
+
+        <a href="{{ cat_link }}" class="poedagar-cat__item" {{ block.shopify_attributes }}>
+          <div class="poedagar-cat__image-wrap">
+            {%- if bg_image -%}
+              <img src="{{ bg_image | img_url: '600x800', crop: 'center' }}" alt="{{ cat_title | escape }}" class="poedagar-cat__image" loading="lazy">
+            {%- else -%}
+              <div class="poedagar-cat__placeholder" style="background: linear-gradient(135deg, #2a2a2a, #1a1a1a);"></div>
+            {%- endif -%}
+            <div class="poedagar-cat__overlay"></div>
+          </div>
+          <div class="poedagar-cat__content">
+            {%- assign p_count = col.all_products_count | plus: 0 -%}
+            {%- if p_count > 0 -%}
+              <span class="poedagar-cat__count">{{ p_count }} productos</span>
+            {%- endif -%}
+            <h3 class="poedagar-cat__item-title">{{ cat_title }}</h3>
+            <span class="poedagar-cat__item-link">
+              {{ cat_cta }}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </span>
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+#poedagar-cat-{{ sid }} {
+  padding: {{ s.padding_v }}px 24px;
+}
+.poedagar-cat__container {
+  margin: 0 auto;
+  width: 100%;
+}
+.poedagar-cat__header {
+  margin-bottom: 48px;
+}
+.poedagar-cat__eyebrow {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 13px;
+  margin: 0 0 12px;
+}
+.poedagar-cat__title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-weight: 700;
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+.poedagar-cat__subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.poedagar-cat__header[style*="text-align: left"] .poedagar-cat__subtitle {
+  margin-left: 0;
+}
+.poedagar-cat__grid {
+  display: grid;
+  gap: {{ s.grid_gap }}px;
+}
+.poedagar-cat__item {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: {{ s.border_radius }}px;
+  aspect-ratio: {{ s.aspect_ratio }};
+  text-decoration: none;
+  group;
+}
+.poedagar-cat__image-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.poedagar-cat__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.poedagar-cat__item:hover .poedagar-cat__image {
+  transform: scale(1.08);
+}
+.poedagar-cat__placeholder {
+  width: 100%;
+  height: 100%;
+}
+.poedagar-cat__count {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 6px;
+  display: block;
+}
+.poedagar-cat__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top,
+    rgba(0,0,0,0.82) 0%,
+    rgba(0,0,0,0.3) 50%,
+    rgba(0,0,0,0.05) 100%);
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+.poedagar-cat__item:hover .poedagar-cat__overlay {
+  opacity: 0.95;
+}
+.poedagar-cat__content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 28px 20px;
+  color: #fff;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.poedagar-cat__item-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+.poedagar-cat__item-link {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #cfa85c;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.35s ease;
+}
+.poedagar-cat__item:hover .poedagar-cat__item-link {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 992px) {
+  .poedagar-cat__grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 768px) {
+  #poedagar-cat-{{ sid }} { padding-top: 40px !important; padding-bottom: 40px !important; padding-left: 16px !important; padding-right: 16px !important; }
+  .poedagar-cat__header { margin-bottom: 32px; }
+  .poedagar-cat__title { font-size: 32px; }
+}
+@media (max-width: 576px) {
+  .poedagar-cat__grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+  .poedagar-cat__title { font-size: 26px; }
+  .poedagar-cat__item-title { font-size: 18px; margin-bottom: 4px; }
+  .poedagar-cat__content { padding: 16px 12px; }
+  .poedagar-cat__item-link { font-size: 11px; }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Poedagar — Categorías",
+  "settings": [
+    { "type": "header", "content": "Texto cabecera" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Colecciones" },
+    { "type": "text", "id": "title", "label": "Título", "default": "Descubre por Estilo" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtítulo", "default": "Encuentra el reloj que mejor se adapta a tu personalidad." },
+    { "type": "select", "id": "text_align", "label": "Alineación del texto", "default": "center",
+      "options": [
+        { "value": "left", "label": "Izquierda" },
+        { "value": "center", "label": "Centro" }
+      ]
+    },
+    { "type": "header", "content": "Colores e Interfaz" },
+    { "type": "color", "id": "bg_color", "label": "Color de fondo", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Color de textos", "default": "#1a1a1a" },
+    { "type": "color", "id": "eyebrow_color", "label": "Color eyebrow", "default": "#cfa85c" },
+    { "type": "header", "content": "Diseño de la Cuadrícula" },
+    { "type": "range", "id": "max_width", "label": "Ancho máximo (px)", "min": 800, "max": 1600, "step": 50, "default": 1300 },
+    { "type": "range", "id": "padding_v", "label": "Padding vertical (px)", "min": 20, "max": 160, "step": 10, "default": 80 },
+    { "type": "range", "id": "columns_desktop", "label": "Columnas en PC", "min": 2, "max": 5, "step": 1, "default": 3 },
+    { "type": "range", "id": "grid_gap", "label": "Espacio entre tarjetas (px)", "min": 10, "max": 60, "step": 5, "default": 20 },
+    { "type": "range", "id": "border_radius", "label": "Radio de bordes (px)", "min": 0, "max": 40, "step": 2, "default": 4 },
+    { "type": "select", "id": "aspect_ratio", "label": "Proporción de las imágenes", "default": "3/4",
+      "options": [
+        { "value": "1/1", "label": "1:1 (Cuadrado)" },
+        { "value": "3/4", "label": "3:4 (Retrato vertical)" },
+        { "value": "4/3", "label": "4:3 (Apaisado)" }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Tarjeta de Categoría",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Selecciona una colección de tu tienda. La imagen y el título se toman automáticamente de la colección."
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "🗂️ Colección de la tienda"
+        },
+        {
+          "type": "header",
+          "content": "Personalización (opcional)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen personalizada",
+          "info": "Reemplaza la imagen automática de la colección"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Título personalizado",
+          "info": "Si lo dejas vacío, se usa el nombre de la colección"
+        },
+        {
+          "type": "text",
+          "id": "cta",
+          "label": "Texto del botón",
+          "default": "Explorar"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "URL personalizada (opcional)",
+          "info": "Solo si quieres enlazar a una página distinta a la colección"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Poedagar — Categorías",
+      "category": "Poedagar",
+      "blocks": [
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" }
+      ]
+    }
+  ]
+}
+{% endschema %}
