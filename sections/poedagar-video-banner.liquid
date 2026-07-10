@@ -33,7 +33,7 @@
         <source src="{{ s.video_url }}" type="video/mp4">
       </video>
     {%- elsif s.poster -%}
-      <img src="{{ s.poster | img_url: '1600x' }}" alt="" class="poedagar-vb__video poedagar-vb__video--img" loading="eager">
+      <img src="{{ s.poster | img_url: '1600x' }}" alt="" class="poedagar-vb__video poedagar-vb__video--img" loading="eager" fetchpriority="high">
     {%- endif -%}
   </div>
 
