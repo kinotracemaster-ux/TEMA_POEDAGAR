@@ -35,11 +35,13 @@
                 {%- if product.featured_image -%}
                   <img
                     id="mainimg-{{ pid }}"
-                    src="{{ product.featured_image | img_url: '600x' }}"
+                    src="{{ product.featured_image | image_url: width: 600 }}"
+                    width="600"
+                    height="{{ 600 | divided_by: product.featured_image.aspect_ratio | round }}"
                     alt="{{ product.title | escape }}"
                     class="poedagar-fp__product-image main-img"
                     loading="lazy"
-                    data-original="{{ product.featured_image | img_url: '600x' }}">
+                    data-original="{{ product.featured_image | image_url: width: 600 }}">
                 {%- else -%}
                   {{ 'product-1' | placeholder_svg_tag: 'poedagar-fp__product-image placeholder-svg' }}
                 {%- endif -%}
@@ -66,11 +68,11 @@
                         <button
                           type="button"
                           class="poedagar-fp__variant-thumb"
-                          data-img-src="{{ variant.image | img_url: '600x' }}"
+                          data-img-src="{{ variant.image | image_url: width: 600 }}"
                           data-img-alt="{{ variant.title | escape }}"
                           aria-label="Ver variante {{ variant.title | escape }}"
                         >
-                          <img src="{{ variant.image | img_url: '60x60', crop: 'center' }}" alt="{{ variant.title | escape }}" loading="lazy">
+                          <img src="{{ variant.image | image_url: width: 60, height: 60, crop: 'center' }}" width="60" height="60" alt="{{ variant.title | escape }}" loading="lazy">
                         </button>
                       {%- endif -%}
                       {%- assign variant_count = variant_count | plus: 1 -%}

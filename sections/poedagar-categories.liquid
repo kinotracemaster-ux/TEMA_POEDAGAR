@@ -60,7 +60,7 @@
         <a href="{{ cat_link }}" class="poedagar-cat__item" {{ block.shopify_attributes }}>
           <div class="poedagar-cat__image-wrap">
             {%- if bg_image -%}
-              <img src="{{ bg_image | img_url: '600x800', crop: 'center' }}" alt="{{ cat_title | escape }}" class="poedagar-cat__image" loading="lazy">
+              <img src="{{ bg_image | image_url: width: 600, height: 800, crop: 'center' }}" width="600" height="800" alt="{{ cat_title | escape }}" class="poedagar-cat__image" loading="lazy">
             {%- else -%}
               <div class="poedagar-cat__placeholder" style="background: linear-gradient(135deg, #2a2a2a, #1a1a1a);"></div>
             {%- endif -%}

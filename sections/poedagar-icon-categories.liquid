@@ -31,7 +31,7 @@
         <a href="{{ cat_link }}" class="poedagar-icat__item" {{ block.shopify_attributes }}>
           <div class="poedagar-icat__img-wrap" style="aspect-ratio: {{ s.aspect_ratio }}; border-radius: {{ s.shape_radius }}px;">
             {%- if bg_image -%}
-              <img src="{{ bg_image | img_url: '400x400', crop: 'center' }}" alt="{{ cat_title | escape }}" class="poedagar-icat__img" loading="lazy">
+              <img src="{{ bg_image | image_url: width: 400, height: 400, crop: 'center' }}" width="400" height="400" alt="{{ cat_title | escape }}" class="poedagar-icat__img" loading="lazy">
             {%- else -%}
               <div class="poedagar-icat__placeholder"></div>
             {%- endif -%}

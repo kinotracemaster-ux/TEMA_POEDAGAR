@@ -42,13 +42,13 @@
                 <video 
                   class="poedagar-ig__video" 
                   src="{{ b.video_url }}" 
-                  poster="{{ b.image | img_url: '400x700', crop: 'center' }}"
+                  poster="{{ b.image | image_url: width: 400, height: 700, crop: 'center' }}"
                   preload="none" 
                   loop 
                   muted 
                   playsinline></video>
               {%- elsif b.image != blank -%}
-                <img src="{{ b.image | img_url: '400x700', crop: 'center' }}" alt="Instagram post" class="poedagar-ig__img" loading="lazy">
+                <img src="{{ b.image | image_url: width: 400, height: 700, crop: 'center' }}" width="400" height="700" alt="Instagram post" class="poedagar-ig__img" loading="lazy">
               {%- else -%}
                 <div class="poedagar-ig__placeholder"></div>
               {%- endif -%}

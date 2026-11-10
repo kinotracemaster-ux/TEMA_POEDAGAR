@@ -28,12 +28,12 @@
       <video
         class="poedagar-vb__video"
         autoplay="autoplay" loop="loop" muted playsinline preload="auto"
-        {%- if s.poster -%} poster="{{ s.poster | img_url: '1400x' }}" {%- endif -%}
+        {%- if s.poster -%} poster="{{ s.poster | image_url: width: 1400 }}" {%- endif -%}
       >
         <source src="{{ s.video_url }}" type="video/mp4">
       </video>
     {%- elsif s.poster -%}
-      <img src="{{ s.poster | img_url: '1600x' }}" alt="" class="poedagar-vb__video poedagar-vb__video--img" loading="eager" fetchpriority="high">
+      <img src="{{ s.poster | image_url: width: 1600 }}" width="1600" height="{{ 1600 | divided_by: s.poster.aspect_ratio | round }}" alt="" class="poedagar-vb__video poedagar-vb__video--img" loading="eager">
     {%- endif -%}
   </div>
 

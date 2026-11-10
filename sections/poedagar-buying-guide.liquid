@@ -1,0 +1,126 @@
+{%- if section.settings.title != blank or section.blocks.size > 0 -%}
+<section id="poedagar-guide-{{ section.id }}" class="poedagar-guide"{% if section.settings.title != blank %} aria-labelledby="poedagar-guide-title-{{ section.id }}"{% endif %}>
+  <div class="container container--medium">
+    {%- if section.settings.title != blank -%}
+      <h2 id="poedagar-guide-title-{{ section.id }}" class="heading h2">{{ section.settings.title | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.intro != blank -%}
+      <div class="rte poedagar-guide__intro">{{ section.settings.intro }}</div>
+    {%- endif -%}
+    <div class="poedagar-guide__questions">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.question != blank and block.settings.answer != blank -%}
+          <details class="poedagar-guide__item" {{ block.shopify_attributes }}>
+            <summary>{{ block.settings.question | escape }}</summary>
+            <div class="rte poedagar-guide__answer">{{ block.settings.answer }}</div>
+          </details>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    <div class="poedagar-guide__links">
+      <a href="{{ routes.all_products_collection_url }}">Ver catálogo de relojes Poedagar</a>
+      <a href="{{ routes.root_url }}pages/quienes-somos">Conocer a Poedagar Colombia y Kino</a>
+      {%- if section.settings.wholesale_link != blank -%}
+        <a href="{{ section.settings.wholesale_link | escape }}">Consultar compras mayoristas</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+{%- style -%}
+  #poedagar-guide-{{ section.id }} { padding: 48px 0; background: var(--cream, #fcfbf9); color: var(--dark, #1a1a1a); }
+  #poedagar-guide-{{ section.id }} .poedagar-guide__intro { margin-bottom: 24px; }
+  #poedagar-guide-{{ section.id }} .poedagar-guide__item { border-bottom: 1px solid rgba(26,26,26,.15); }
+  #poedagar-guide-{{ section.id }} summary { cursor: pointer; padding: 18px 0; font-weight: 600; }
+  #poedagar-guide-{{ section.id }} summary:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+  #poedagar-guide-{{ section.id }} .poedagar-guide__answer { padding: 0 0 20px; }
+  #poedagar-guide-{{ section.id }} .poedagar-guide__links { display: flex; flex-wrap: wrap; gap: 16px 28px; margin-top: 28px; }
+  #poedagar-guide-{{ section.id }} .poedagar-guide__links a { text-decoration: underline; text-underline-offset: 4px; }
+{%- endstyle -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Poedagar: guía de compra",
+  "tag": "div",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "Relojes Poedagar en Colombia: compra y distribución"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Presentación",
+      "default": "<p>Conoce los relojes Poedagar para hombre y mujer y las opciones de compra para tu negocio. Kino Company SAS es el distribuidor exclusivo y autorizado de la marca en Colombia.</p>"
+    },
+    {
+      "type": "url",
+      "id": "wholesale_link",
+      "label": "Enlace de atención mayorista"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Pregunta y respuesta",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Pregunta"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Respuesta"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Poedagar: guía de compra",
+      "blocks": [
+        {
+          "type": "question",
+          "settings": {
+            "question": "¿Quién distribuye los relojes Poedagar en Colombia?",
+            "answer": "<p>Kino Company SAS es el distribuidor exclusivo y autorizado de Poedagar en Colombia. Poedagar Colombia Oficial es su canal de venta de relojes de la marca, con atención desde Medellín y Bogotá.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "¿Dónde comprar relojes Poedagar originales en Colombia?",
+            "answer": "<p>Puedes consultar los modelos y comprar en esta tienda de Poedagar Colombia Oficial. Revisa la referencia, el color, las características y la disponibilidad de la variante antes de realizar tu pedido.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "¿Puedo comprar Poedagar al por mayor para mi negocio?",
+            "answer": "<p>Sí. Atendemos compras mayoristas para emprendedores, relojerías, distribuidores y negocios que trabajan con dropshipping. Consulta con nuestro equipo el catálogo y las condiciones vigentes según tu compra.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "¿Cómo elegir un reloj Poedagar para hombre o mujer?",
+            "answer": "<p>Compara el diámetro de la caja, las medidas y el material de la correa, el color y las funciones indicadas en cada ficha. Explora las colecciones de estilo clásico, deportivo, casual y de dama para encontrar una referencia para uso diario o regalo.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "¿Todos los relojes Poedagar tienen las mismas funciones y resistencia al agua?",
+            "answer": "<p>No. Las funciones y la resistencia al agua dependen de la referencia. Consulta la ficha del modelo y sus instrucciones de uso; no supongas que un reloj admite inmersión por la apariencia o por pertenecer a la misma marca.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
